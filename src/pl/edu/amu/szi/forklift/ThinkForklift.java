@@ -16,150 +16,7 @@ import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 import java.util.Random;
 
-class Package {
-    int posX, posY;
-    Image img;
-    GraphicsContext gc;
-    float tileWidth;
-    float tileHeight;
-    
-    public Package(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
-        this.gc = gc;
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
-        this.loadImg(imageSrc, tileWidth, tileHeight);
-        this.setPosition(initX, initY);
-    }
-
-    public void render() {
-        gc.drawImage(img, posX * tileWidth, posY * tileHeight);
-    }
-
-    private void loadImg(String src, float width, float height) {
-        this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
-    }
-
-    private void setPosition(int x, int y) {
-        posX = x;
-        posY = y;
-    }
-    
-    public int getXPos() {
-        return posX;
-    }
-    
-    public int getYPos() {
-        return posY;
-    }
-}
-
-class Shelf {
-
-    int posX = 0;
-    int posY = 0;
-    Image img;
-    GraphicsContext gc;
-    float tileWidth;
-    float tileHeight;
-
-    public Shelf(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
-        this.gc = gc;
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
-        this.loadImg(imageSrc, tileWidth, tileHeight);
-        this.setPosition(initX, initY);
-    }
-
-    public void render() {
-        gc.drawImage(img, posX * tileWidth, posY * tileHeight);
-    }
-
-    private void loadImg(String src, float width, float height) {
-        this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
-    }
-
-    private void setPosition(int x, int y) {
-        posX = x;
-        posY = y;
-    }
-    
-    public int getXPos() {
-        return posX;
-    }
-    
-    public int getYPos() {
-        return posY;
-    }
-}
-
-class ForkLiftObj {
-
-    int posX = 0;
-    int posY = 0;
-    Image img;
-    GraphicsContext gc;
-    float tileWidth;
-    float tileHeight;
-
-    public ForkLiftObj(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
-        this.gc = gc;
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
-        this.loadImg(imageSrc, tileWidth, tileHeight);
-        this.setPosition(initX, initY);
-    }
-
-    public void setPosition(int x, int y) {
-        posX = x;
-        posY = y;
-    }
-
-    public void moveUp() {
-        if (posY > 0) {
-            setPosition(posX, posY - 1);
-        }
-    }
-
-    public void moveDown() {
-        if (posY < 14) {
-            setPosition(posX, posY + 1);
-        }
-    }
-
-    public void moveLeft() {
-        if (posX > 0) {
-            setPosition(posX - 1, posY);
-        }
-    }
-
-    public void moveRight() {
-        if (posX < 14) {
-            setPosition(posX + 1, posY);
-        }
-    }
-
-    public void render() {
-        gc.drawImage(img, posX * tileWidth, posY * tileHeight);
-    }
-
-    private void loadImg(String src, float width, float height) {
-        this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
-    }
-
-    public int getXPos() {
-        return posX;
-    }
-    
-    public int getYPos() {
-        return posY;
-    }
-}
-
-/**
- *
- * @author Tosia
- */
-public class JavaFXApplication1 extends Application {
+public class ThinkForklift extends Application {
 
     /**
      * @param args the command line arguments
@@ -355,16 +212,19 @@ public class JavaFXApplication1 extends Application {
             }
         }.start();
 
-        //theStage.setFullScreen(true);
         theStage.show();
     }
     
     public static boolean checkIfCollision(ArrayList<Shelf> shelfList, int nextXPos,int nextYPos) {
-       for(int i=0; i < shelfList.size(); i++) {
-            if((shelfList.get(i).getXPos() == nextXPos) && (shelfList.get(i).getYPos() == nextYPos) || (nextXPos < 0) || (nextXPos > 14) || (nextYPos < 0) || (nextYPos > 14)){
+        for (Shelf aShelfList : shelfList) {
+            if ((aShelfList.getXPos() == nextXPos) && (aShelfList.getYPos() == nextYPos)
+                    || (nextXPos < 0)
+                    || (nextXPos > 14)
+                    || (nextYPos < 0)
+                    || (nextYPos > 14)) {
                 return true;
             }
-       }
+        }
        return false;
     }
 }
