@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package javafxapplication1;
+package pl.edu.amu.szi.forklift;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -20,15 +15,6 @@ import java.util.HashSet;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 import java.util.Random;
-
-class Position {
-    public int posX = 0;
-    public int posY = 0;
-    public Position(int posX, int posY){
-        this.posX = posX;
-        this.posY = posY;
-    }
-}
 
 class Package {
     int posX, posY;
@@ -160,10 +146,6 @@ class ForkLiftObj {
         this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
     }
 
-    private void invert() {
-
-    }
-    
     public int getXPos() {
         return posX;
     }
@@ -224,7 +206,7 @@ public class JavaFXApplication1 extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image tileImg = new Image(getClass().getResourceAsStream("podloga2.png"), tileWidth, tileHeight, false, false);
+        Image tileImg = new Image(getClass().getResourceAsStream("img/podloga2.png"), tileWidth, tileHeight, false, false);
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
@@ -232,13 +214,13 @@ public class JavaFXApplication1 extends Application {
             }
         }
 
-        ForkLiftObj forkLift = new ForkLiftObj(gc, "forklift.png", tileWidth, tileHeight, 0, 0);
+        ForkLiftObj forkLift = new ForkLiftObj(gc, "img/forklift.png", tileWidth, tileHeight, 0, 0);
         
         ArrayList<Shelf> shelfList = new ArrayList();
         
         for(int k=0; k<15; k=k+3) {
             for(int j=5; j<15; j++) {
-                shelfList.add(new Shelf(gc, "polkidwie.png", tileWidth, tileHeight, j, k));
+                shelfList.add(new Shelf(gc, "img/polkidwie.png", tileWidth, tileHeight, j, k));
             }
         }
         
@@ -266,7 +248,7 @@ public class JavaFXApplication1 extends Application {
                 }
             } while (test);
            
-            packageList.add(new Package(gc, "paczka12.png", tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, "img/paczka12.png", tileWidth, tileHeight, posX, posY));
         }
         
         for(int k=0; k<packageAmount; k++) {
@@ -291,7 +273,7 @@ public class JavaFXApplication1 extends Application {
                 }
             } while (test);
            
-            packageList.add(new Package(gc, "paczka22.png", tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, "img/paczka22.png", tileWidth, tileHeight, posX, posY));
         }
         
         for(int k=0; k<packageAmount; k++) {
@@ -316,7 +298,7 @@ public class JavaFXApplication1 extends Application {
                 }
             } while (test);
            
-            packageList.add(new Package(gc, "paczka32.png", tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, "img/paczka32.png", tileWidth, tileHeight, posX, posY));
         }
        
         theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
