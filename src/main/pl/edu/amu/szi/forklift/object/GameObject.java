@@ -20,24 +20,24 @@ public class GameObject {
         this.loadImg(imageSrc, tileWidth, tileHeight);
     }
 
-    public void render() {
-        gc.drawImage(img, position.getX() * tileWidth, position.getY() * tileHeight);
-    }
-
-    private void loadImg(String src, float width, float height) {
-        this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
-    }
-
-    private void setPosition(int x, int y) {
-        position.setX(x);
-        position.setY(y);
-    }
-
     public int getXPos() {
         return position.getX();
     }
 
     public int getYPos() {
         return position.getY();
+    }
+
+    public void render() {
+        gc.drawImage(img, position.getX() * tileWidth, position.getY() * tileHeight);
+    }
+
+    public void setPosition(int x, int y) {
+        position.setX(x);
+        position.setY(y);
+    }
+
+    private void loadImg(String src, float width, float height) {
+        this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
     }
 }

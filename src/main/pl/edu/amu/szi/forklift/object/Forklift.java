@@ -1,67 +1,34 @@
 package main.pl.edu.amu.szi.forklift.object;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
-public class Forklift {
-
-    int posX = 0;
-    int posY = 0;
-    Image img;
-    GraphicsContext gc;
-    float tileWidth;
-    float tileHeight;
+public class Forklift extends GameObject {
 
     public Forklift(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
-        this.gc = gc;
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
-        this.loadImg(imageSrc, tileWidth, tileHeight);
-        this.setPosition(initX, initY);
-    }
-
-    public void setPosition(int x, int y) {
-        posX = x;
-        posY = y;
+        super(gc, imageSrc, tileWidth, tileHeight, initX, initY);
     }
 
     public void moveUp() {
-        if (posY > 0) {
-            setPosition(posX, posY - 1);
+        if (getYPos() > 0) {
+            setPosition(getXPos(), getYPos() - 1);
         }
     }
 
     public void moveDown() {
-        if (posY < 14) {
-            setPosition(posX, posY + 1);
+        if (getYPos() < 14) {
+            setPosition(getXPos(), getYPos() + 1);
         }
     }
 
     public void moveLeft() {
-        if (posX > 0) {
-            setPosition(posX - 1, posY);
+        if (getXPos() > 0) {
+            setPosition(getXPos() - 1, getYPos());
         }
     }
 
     public void moveRight() {
-        if (posX < 14) {
-            setPosition(posX + 1, posY);
+        if (getXPos() < 14) {
+            setPosition(getXPos() + 1, getYPos());
         }
-    }
-
-    public void render() {
-        gc.drawImage(img, posX * tileWidth, posY * tileHeight);
-    }
-
-    private void loadImg(String src, float width, float height) {
-        this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
-    }
-
-    public int getXPos() {
-        return posX;
-    }
-
-    public int getYPos() {
-        return posY;
     }
 }
