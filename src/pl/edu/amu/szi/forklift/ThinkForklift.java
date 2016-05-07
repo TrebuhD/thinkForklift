@@ -13,14 +13,15 @@ import javafx.scene.layout.StackPane;
 import javafx.event.EventHandler;
 import java.util.HashSet;
 import javafx.animation.AnimationTimer;
+import pl.edu.amu.szi.forklift.object.Forklift;
+import pl.edu.amu.szi.forklift.object.Package;
+import pl.edu.amu.szi.forklift.object.Shelf;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class ThinkForklift extends Application {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
@@ -71,7 +72,7 @@ public class ThinkForklift extends Application {
             }
         }
 
-        ForkLiftObj forkLift = new ForkLiftObj(gc, "img/forklift.png", tileWidth, tileHeight, 0, 0);
+        Forklift forkLift = new Forklift(gc, "img/forklift.png", tileWidth, tileHeight, 0, 0);
         
         ArrayList<Shelf> shelfList = new ArrayList();
         

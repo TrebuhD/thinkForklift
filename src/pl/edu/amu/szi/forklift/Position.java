@@ -1,6 +1,6 @@
 package pl.edu.amu.szi.forklift;
 
-class Position {
+public class Position {
     private int x;
     private int y;
 

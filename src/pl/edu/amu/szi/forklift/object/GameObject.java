@@ -1,25 +1,27 @@
-package pl.edu.amu.szi.forklift;
+package pl.edu.amu.szi.forklift.object;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import pl.edu.amu.szi.forklift.Position;
 
-public class Package {
-    int posX, posY;
-    Image img;
-    GraphicsContext gc;
+public class GameObject {
+    private Position position;
+    private Image img;
+    private GraphicsContext gc;
+
     float tileWidth;
     float tileHeight;
 
-    public Package(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
+    public GameObject(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
         this.gc = gc;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
+        this.position = new Position(initX, initY);
         this.loadImg(imageSrc, tileWidth, tileHeight);
-        this.setPosition(initX, initY);
     }
 
     public void render() {
-        gc.drawImage(img, posX * tileWidth, posY * tileHeight);
+        gc.drawImage(img, position.getX() * tileWidth, position.getY() * tileHeight);
     }
 
     private void loadImg(String src, float width, float height) {
@@ -27,15 +29,15 @@ public class Package {
     }
 
     private void setPosition(int x, int y) {
-        posX = x;
-        posY = y;
+        position.setX(x);
+        position.setY(y);
     }
 
     public int getXPos() {
-        return posX;
+        return position.getX();
     }
 
     public int getYPos() {
-        return posY;
+        return position.getY();
     }
 }

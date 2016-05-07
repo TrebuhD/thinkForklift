@@ -1,9 +1,9 @@
-package pl.edu.amu.szi.forklift;
+package pl.edu.amu.szi.forklift.object;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class ForkLiftObj {
+public class Forklift {
 
     int posX = 0;
     int posY = 0;
@@ -12,7 +12,7 @@ public class ForkLiftObj {
     float tileWidth;
     float tileHeight;
 
-    public ForkLiftObj(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
+    public Forklift(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
         this.gc = gc;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
