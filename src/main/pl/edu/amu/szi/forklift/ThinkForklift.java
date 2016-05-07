@@ -2,15 +2,18 @@ package main.pl.edu.amu.szi.forklift;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.pl.edu.amu.szi.forklift.object.Forklift;
+import main.pl.edu.amu.szi.forklift.object.GameObject;
 import main.pl.edu.amu.szi.forklift.object.Package;
 import main.pl.edu.amu.szi.forklift.object.Shelf;
 
@@ -26,7 +29,19 @@ public class ThinkForklift extends Application {
     public static final int CANVAS_WIDTH = 600;
     public static final int CANVAS_HEIGHT = 600;
 
-    ArrayList<Shelf> shelfList;
+    private GraphicsContext gc;
+    private HashSet<String> currentlyActiveKeys;
+
+    private ArrayList<Shelf> shelfList;
+    private ArrayList<Package> packageList;
+
+    private Image floorImg;
+    private Forklift forkLift;
+
+    private float tileWidth;
+    private float tileHeight;
+    double screenWidthResolution;
+    double screenHeightResolution;
 
     public static void main(String[] args) {
         launch(args);
@@ -34,146 +49,113 @@ public class ThinkForklift extends Application {
 
     @Override
     public void start(Stage theStage) {
-        float tileWidth = CANVAS_WIDTH / MAP_SIZE_X;
-        float tileHeight = CANVAS_HEIGHT / MAP_SIZE_Y;
+        Scene theScene = prepareScene(theStage);
+        prepareObjects();
 
-        double screenWidthResolution = Screen.getPrimary().getVisualBounds().getWidth();
-        double screenHeightResolution = Screen.getPrimary().getVisualBounds().getHeight();
+        new MainGameLoop().start();
+
+        theStage.show();
+    }
+
+    private Scene prepareScene(Stage theStage) {
+        tileWidth = CANVAS_WIDTH / MAP_SIZE_X;
+        tileHeight = CANVAS_HEIGHT / MAP_SIZE_Y;
+
+        screenWidthResolution = Screen.getPrimary().getVisualBounds().getWidth();
+        screenHeightResolution = Screen.getPrimary().getVisualBounds().getHeight();
 
         theStage.setTitle("Think Forklift");
 
         Group root = new Group();
+        root.setCache(true);
+        root.setCacheHint(CacheHint.SPEED);
+
         Scene theScene = new Scene(root);
+        theScene.setFill(Color.BLACK);
 
         theStage.setScene(theScene);
 
-        HashSet<String> currentlyActiveKeys = new HashSet<>();
+        currentlyActiveKeys = new HashSet<>();
         StackPane holder = new StackPane();
         holder.setPrefSize(screenWidthResolution, screenHeightResolution);
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        canvas.setCache(true);
+        canvas.setCacheHint(CacheHint.SPEED);
+
         holder.getChildren().add(canvas);
+        holder.setCache(true);
+        holder.setCacheHint(CacheHint.SPEED);
+
         root.getChildren().add(holder);
 
-        holder.setStyle("-fx-background-color: black");
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        Image floorImage = new Image(getClass().
-                getResourceAsStream("/img/podloga2.png"), tileWidth, tileHeight, false, false);
-
-        Forklift forkLift = new Forklift(gc, "/img/forklift.png", tileWidth, tileHeight, 0, 0);
-
-        shelfList = new ArrayList<>();
-
-        for (int k = 0; k < 15; k = k + 3) {
-            for (int j = 5; j < 15; j++) {
-                shelfList.add(new Shelf(gc, "/img/polkidwie.png", tileWidth, tileHeight, j, k));
-            }
-        }
-
-        ArrayList<Package> packageList = new ArrayList();
-
-        for (int k = 0; k < PACKAGE_COUNT; k++) {
-            int posX = 0;
-            int posY = 0;
-
-            Boolean test;
-
-            do {
-                test = false;
-                Random r = new Random();
-                int low = 0;
-                int high = 15;
-                posX = r.nextInt(15);
-                posY = r.nextInt(15);
-
-                for (int i = 0; i < shelfList.size(); i++) {
-                    if ((shelfList.get(i).getXPos() == posX) && (shelfList.get(i).getYPos() == posY)) {
-                        test = true;
-                        break;
-                    }
-                }
-            } while (test);
-
-            packageList.add(new Package(gc, "/img/paczka12.png", tileWidth, tileHeight, posX, posY));
-        }
-
-        for (int k = 0; k < PACKAGE_COUNT; k++) {
-            int posX = 0;
-            int posY = 0;
-
-            Boolean test;
-
-            do {
-                test = false;
-                Random r = new Random();
-                int low = 0;
-                int high = 15;
-                posX = r.nextInt(15);
-                posY = r.nextInt(15);
-
-                for (int i = 0; i < shelfList.size(); i++) {
-                    if ((shelfList.get(i).getXPos() == posX) && (shelfList.get(i).getYPos() == posY)) {
-                        test = true;
-                        break;
-                    }
-                }
-            } while (test);
-
-            packageList.add(new Package(gc, "/img/paczka22.png", tileWidth, tileHeight, posX, posY));
-        }
-
-        for (int k = 0; k < PACKAGE_COUNT; k++) {
-            int posX = 0;
-            int posY = 0;
-
-            Boolean test;
-
-            do {
-                test = false;
-                Random r = new Random();
-                int low = 0;
-                int high = 15;
-                posX = r.nextInt(15);
-                posY = r.nextInt(15);
-
-                for (int i = 0; i < shelfList.size(); i++) {
-                    if ((shelfList.get(i).getXPos() == posX) && (shelfList.get(i).getYPos() == posY)) {
-                        test = true;
-                        break;
-                    }
-                }
-            } while (test);
-
-            packageList.add(new Package(gc, "/img/paczka32.png", tileWidth, tileHeight, posX, posY));
-        }
-
-        theScene.setOnKeyPressed(event -> currentlyActiveKeys.add(event.getCode().toString()));
+        gc = canvas.getGraphicsContext2D();
 
         theStage.setWidth(screenWidthResolution);
         theStage.setHeight(screenHeightResolution);
 
-        new AnimationTimer() {
-            public void handle(long currentNanoTime) {
-                gc.clearRect(0, 0, screenWidthResolution, screenHeightResolution);
+        theScene.setOnKeyPressed(event -> currentlyActiveKeys.add(event.getCode().toString()));
 
-                handleInput(currentlyActiveKeys, forkLift);
-
-                drawFloor(gc, floorImage, tileWidth, tileHeight);
-
-                shelfList.forEach((shelf -> shelf.render()));
-
-                packageList.forEach((packageOb -> packageOb.render()));
-
-                forkLift.render();
-
-                currentlyActiveKeys.clear();
-            }
-        }.start();
-
-        theStage.show();
+        return theScene;
     }
+
+    private void prepareObjects() {
+        shelfList = new ArrayList<>();
+        packageList = new ArrayList<>();
+
+        floorImg = new Image(getClass().getResourceAsStream("/img/podloga2.png"), tileWidth, tileHeight, false, false);
+        forkLift = new Forklift(gc, "/img/forklift.png", tileWidth, tileHeight, 0, 0);
+
+        create_shelves();
+        create_packages("/img/paczka12.png");
+        create_packages("/img/paczka22.png");
+        create_packages("/img/paczka32.png");
+    }
+
+    private void create_shelves() {
+        for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
+            for (int j = 5; j < MAP_SIZE_Y; j++) {
+                shelfList.add(new Shelf(gc, "/img/polkidwie.png", tileWidth, tileHeight, j, k));
+            }
+        }
+    }
+
+    private void create_packages(String packageType) {
+        for (int k = 0; k < PACKAGE_COUNT; k++) {
+            int posX;
+            int posY;
+
+            Boolean test;
+
+            // Tosia: co ten kod robi dokładnie?
+            do {
+                test = false;
+                Random r = new Random();
+                int low = 0;
+                int high = 15;
+                posX = r.nextInt(15);
+                posY = r.nextInt(15);
+
+                for (Shelf shelf : shelfList) {
+                    if ((shelf.getXPos() == posX) && (shelf.getYPos() == posY)) {
+                        test = true;
+                        break;
+                    }
+                }
+            } while (test);
+
+            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY));
+        }
+    }
+
+    private void drawFloor(GraphicsContext gc, Image image, float width, float height) {
+        for (int i = 0; i < MAP_SIZE_X; i++) {
+            for (int j = 0; j < MAP_SIZE_Y; j++) {
+                gc.drawImage(image, i * width, j * height);
+            }
+        }
+    }
+
 
     private void handleInput(HashSet currentKeys, Forklift forklift) {
         if (currentKeys.contains("LEFT")) {
@@ -195,24 +177,34 @@ public class ThinkForklift extends Application {
         }
     }
 
-
     public boolean collisionFound(int nextXPos, int nextYPos) {
         // collision with shelf
         for (Shelf shelf : shelfList) {
-            if ((shelf.getXPos() == nextXPos)
-                    && (shelf.getYPos() == nextYPos)) {
+            if ((shelf.getXPos() == nextXPos) && (shelf.getYPos() == nextYPos)) {
                 return true;
             }
         }
         return false;
     }
 
-    private void drawFloor(GraphicsContext gc, Image image, float width, float height) {
-        for (int i = 0; i < MAP_SIZE_X; i++) {
-            for (int j = 0; j < MAP_SIZE_Y; j++) {
-                gc.drawImage(image, i * width, j * height);
-            }
-        }
+    private class MainGameLoop extends AnimationTimer {
 
+        @Override
+        public void handle(long now) {
+            gc.clearRect(0, 0, screenWidthResolution, screenHeightResolution);
+
+            handleInput(currentlyActiveKeys, forkLift);
+
+            drawFloor(gc, floorImg, tileWidth, tileHeight);
+
+            // skrócona forma
+            shelfList.forEach(GameObject::render);
+
+            packageList.forEach(GameObject::render);
+
+            forkLift.render();
+
+            currentlyActiveKeys.clear();
+        }
     }
 }
