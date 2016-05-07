@@ -1,4 +1,4 @@
-package pl.edu.amu.szi.forklift;
+package main.pl.edu.amu.szi.forklift;
 
 public class Position {
     private int x;

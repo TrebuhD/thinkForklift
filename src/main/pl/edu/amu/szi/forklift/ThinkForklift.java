@@ -1,4 +1,4 @@
-package pl.edu.amu.szi.forklift;
+package main.pl.edu.amu.szi.forklift;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -13,9 +13,9 @@ import javafx.scene.layout.StackPane;
 import javafx.event.EventHandler;
 import java.util.HashSet;
 import javafx.animation.AnimationTimer;
-import pl.edu.amu.szi.forklift.object.Forklift;
-import pl.edu.amu.szi.forklift.object.Package;
-import pl.edu.amu.szi.forklift.object.Shelf;
+import main.pl.edu.amu.szi.forklift.object.Forklift;
+import main.pl.edu.amu.szi.forklift.object.Package;
+import main.pl.edu.amu.szi.forklift.object.Shelf;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -50,7 +50,7 @@ public class ThinkForklift extends Application {
         Scene theScene = new Scene(root);
         theStage.setScene(theScene);
 
-        HashSet<String> currentlyActiveKeys = new HashSet<String>();
+        HashSet<String> currentlyActiveKeys = new HashSet<>();
 
         StackPane holder = new StackPane();
         holder.setPrefSize(screenWidthResolution, screenHeightResolution);
@@ -64,7 +64,7 @@ public class ThinkForklift extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image tileImg = new Image(getClass().getResourceAsStream("img/podloga2.png"), tileWidth, tileHeight, false, false);
+        Image tileImg = new Image(getClass().getResourceAsStream("/img/podloga2.png"), tileWidth, tileHeight, false, false);
 
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
@@ -72,13 +72,13 @@ public class ThinkForklift extends Application {
             }
         }
 
-        Forklift forkLift = new Forklift(gc, "img/forklift.png", tileWidth, tileHeight, 0, 0);
+        Forklift forkLift = new Forklift(gc, "/img/forklift.png", tileWidth, tileHeight, 0, 0);
         
         ArrayList<Shelf> shelfList = new ArrayList();
         
         for(int k=0; k<15; k=k+3) {
             for(int j=5; j<15; j++) {
-                shelfList.add(new Shelf(gc, "img/polkidwie.png", tileWidth, tileHeight, j, k));
+                shelfList.add(new Shelf(gc, "/img/polkidwie.png", tileWidth, tileHeight, j, k));
             }
         }
         
@@ -106,7 +106,7 @@ public class ThinkForklift extends Application {
                 }
             } while (test);
            
-            packageList.add(new Package(gc, "img/paczka12.png", tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, "/img/paczka12.png", tileWidth, tileHeight, posX, posY));
         }
         
         for(int k=0; k<packageAmount; k++) {
@@ -131,7 +131,7 @@ public class ThinkForklift extends Application {
                 }
             } while (test);
            
-            packageList.add(new Package(gc, "img/paczka22.png", tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, "/img/paczka22.png", tileWidth, tileHeight, posX, posY));
         }
         
         for(int k=0; k<packageAmount; k++) {
@@ -156,7 +156,7 @@ public class ThinkForklift extends Application {
                 }
             } while (test);
            
-            packageList.add(new Package(gc, "img/paczka32.png", tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, "/img/paczka32.png", tileWidth, tileHeight, posX, posY));
         }
        
         theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
