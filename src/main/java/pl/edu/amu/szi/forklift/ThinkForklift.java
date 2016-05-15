@@ -21,18 +21,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-import static pl.edu.amu.szi.forklift.Constants.*;
+import static pl.edu.amu.szi.forklift.utils.Constants.*;
 
 public class ThinkForklift extends Application {
 
     private GraphicsContext gc;
     private HashSet<String> currentlyActiveKeys;
 
-    private ArrayList<Shelf> shelfList;
-    private ArrayList<Package> packageList;
-
     private Image floorImg;
-    private Forklift forkLift;
+    public static Forklift forkLift;
 
     private float tileWidth;
     private float tileHeight;
@@ -96,8 +93,8 @@ public class ThinkForklift extends Application {
     }
 
     private void prepareObjects() {
-        shelfList = new ArrayList<>();
-        packageList = new ArrayList<>();
+        Map.shelfList = new ArrayList<>();
+        Map.packageList = new ArrayList<>();
 
         System.out.println(getClass().getResource("").getPath());
         floorImg = new Image(getClass().getResourceAsStream(IMG_PODLOGA), tileWidth, tileHeight, false, false);
@@ -112,7 +109,7 @@ public class ThinkForklift extends Application {
     private void create_shelves() {
         for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
             for (int j = 5; j < MAP_SIZE_Y; j++) {
-                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
+                Map.shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
             }
         }
     }
@@ -130,7 +127,7 @@ public class ThinkForklift extends Application {
                 posX = r.nextInt(MAP_SIZE_X);
                 posY = r.nextInt(MAP_SIZE_Y);
 
-                for (Shelf shelf : shelfList) {
+                for (Shelf shelf : Map.shelfList) {
                     if ((shelf.getXPos() == posX) && (shelf.getYPos() == posY)) {
                         test = true;
                         break;
@@ -138,10 +135,9 @@ public class ThinkForklift extends Application {
                 }
             } while (test);
 
-            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY));
+            Map.packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY));
         }
     }
-
 
     private class MainGameLoop extends AnimationTimer {
 
@@ -149,14 +145,14 @@ public class ThinkForklift extends Application {
         public void handle(long now) {
             gc.clearRect(0, 0, screenWidthResolution, screenHeightResolution);
 
-            ForkliftController.handleInput(currentlyActiveKeys, forkLift, shelfList);
+            ForkliftController.handleInput(currentlyActiveKeys);
 
-            ForkliftController.drawFloor(gc, floorImg, tileWidth, tileHeight);
+            Map.drawFloor(gc, floorImg, tileWidth, tileHeight);
 
             // skrócona forma
-            shelfList.forEach(GameObject::render);
+            Map.shelfList.forEach(GameObject::render);
 
-            packageList.forEach(GameObject::render);
+            Map.packageList.forEach(GameObject::render);
 
             forkLift.render();
 

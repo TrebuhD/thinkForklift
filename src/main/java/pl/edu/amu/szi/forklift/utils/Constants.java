@@ -1,4 +1,4 @@
-package pl.edu.amu.szi.forklift;
+package pl.edu.amu.szi.forklift.utils;
 
 public class Constants {
     public static final String APP_TITLE = "Think forklift";

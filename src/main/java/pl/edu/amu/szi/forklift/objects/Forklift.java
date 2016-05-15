@@ -3,32 +3,58 @@ package pl.edu.amu.szi.forklift.objects;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Forklift extends GameObject {
+    private Package cargo;
 
     public Forklift(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
         super(gc, imageSrc, tileWidth, tileHeight, initX, initY);
+        this.cargo = null;
     }
 
-    public void moveUp() {
-        if (getYPos() > 0) {
-            setPosition(getXPos(), getYPos() - 1);
-        }
+    public Package getCargo() {
+        return cargo;
     }
 
+    public void pickUpCargo(Package cargo) {
+        this.cargo = cargo;
+    }
+
+    public boolean hasCargo() {
+        return cargo != null;
+    }
+
+    public void dropCargo() {
+        this.cargo = null;
+    }
+
+    @Override
     public void moveDown() {
-        if (getYPos() < 14) {
-            setPosition(getXPos(), getYPos() + 1);
+        super.moveDown();
+        if (hasCargo()) {
+            cargo.moveDown();
         }
     }
 
+    @Override
     public void moveLeft() {
-        if (getXPos() > 0) {
-            setPosition(getXPos() - 1, getYPos());
+        super.moveLeft();
+        if (hasCargo()) {
+            cargo.moveLeft();
         }
     }
 
+    @Override
     public void moveRight() {
-        if (getXPos() < 14) {
-            setPosition(getXPos() + 1, getYPos());
+        super.moveRight();
+        if (hasCargo()) {
+            cargo.moveRight();
+        }
+    }
+
+    @Override
+    public void moveUp() {
+        super.moveUp();
+        if (hasCargo()) {
+            cargo.moveUp();
         }
     }
 }

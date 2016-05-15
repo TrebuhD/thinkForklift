@@ -2,6 +2,7 @@ package pl.edu.amu.szi.forklift.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import pl.edu.amu.szi.forklift.utils.Position;
 
 public class GameObject {
     private Position position;
@@ -39,4 +40,29 @@ public class GameObject {
     private void loadImg(String src, float width, float height) {
         this.img = new Image(getClass().getResourceAsStream(src), width, height, false, false);
     }
+
+    public void moveUp() {
+        if (getYPos() > 0) {
+            setPosition(getXPos(), getYPos() - 1);
+        }
+    }
+
+    public void moveDown() {
+        if (getYPos() < 14) {
+            setPosition(getXPos(), getYPos() + 1);
+        }
+    }
+
+    public void moveLeft() {
+        if (getXPos() > 0) {
+            setPosition(getXPos() - 1, getYPos());
+        }
+    }
+
+    public void moveRight() {
+        if (getXPos() < 14) {
+            setPosition(getXPos() + 1, getYPos());
+        }
+    }
+
 }
