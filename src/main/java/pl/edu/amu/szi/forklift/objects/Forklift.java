@@ -1,4 +1,4 @@
-package main.pl.edu.amu.szi.forklift.object;
+package pl.edu.amu.szi.forklift.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 

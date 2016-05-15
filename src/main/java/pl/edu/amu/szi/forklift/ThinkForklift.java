@@ -1,4 +1,4 @@
-package main.pl.edu.amu.szi.forklift;
+package pl.edu.amu.szi.forklift;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -12,24 +12,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import main.pl.edu.amu.szi.forklift.object.Forklift;
-import main.pl.edu.amu.szi.forklift.object.GameObject;
-import main.pl.edu.amu.szi.forklift.object.Package;
-import main.pl.edu.amu.szi.forklift.object.Shelf;
+import pl.edu.amu.szi.forklift.objects.Forklift;
+import pl.edu.amu.szi.forklift.objects.GameObject;
+import pl.edu.amu.szi.forklift.objects.Shelf;
+import pl.edu.amu.szi.forklift.objects.Package;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-import static main.pl.edu.amu.szi.forklift.Constants.*;
+import static pl.edu.amu.szi.forklift.Constants.*;
 
 public class ThinkForklift extends Application {
-    public static final int MAP_SIZE_X = 15;
-    public static final int MAP_SIZE_Y = 15;
-    public static final int PACKAGE_COUNT = 15;
-    public static final int SHELF_COUNT = 20;
-    public static final int CANVAS_WIDTH = 1000;
-    public static final int CANVAS_HEIGHT = 1000;
 
     private GraphicsContext gc;
     private HashSet<String> currentlyActiveKeys;
@@ -42,8 +36,8 @@ public class ThinkForklift extends Application {
 
     private float tileWidth;
     private float tileHeight;
-    double screenWidthResolution;
-    double screenHeightResolution;
+    private double screenWidthResolution;
+    private double screenHeightResolution;
 
     public static void main(String[] args) {
         launch(args);
@@ -60,14 +54,12 @@ public class ThinkForklift extends Application {
     }
 
     private void prepareScene(Stage theStage) {
-
-        screenWidthResolution = Screen.getPrimary().getVisualBounds().getWidth();
-        screenHeightResolution = Screen.getPrimary().getVisualBounds().getHeight();
+        theStage.setTitle(APP_TITLE);
 
         tileWidth = CANVAS_WIDTH / MAP_SIZE_X;
         tileHeight = CANVAS_HEIGHT / MAP_SIZE_Y;
-
-        theStage.setTitle(APP_TITLE);
+        screenWidthResolution = Screen.getPrimary().getVisualBounds().getWidth();
+        screenHeightResolution = Screen.getPrimary().getVisualBounds().getHeight();
 
         Group root = new Group();
         root.setCache(true);
@@ -78,6 +70,7 @@ public class ThinkForklift extends Application {
 
         theStage.setScene(theScene);
 
+//         input key hashmap
         currentlyActiveKeys = new HashSet<>();
         StackPane holder = new StackPane();
         holder.setPrefSize(screenWidthResolution, screenHeightResolution);
@@ -90,6 +83,7 @@ public class ThinkForklift extends Application {
         holder.setCache(true);
         holder.setCacheHint(CacheHint.SPEED);
 
+//         add Pane to main scene
         root.getChildren().add(holder);
 
         gc = canvas.getGraphicsContext2D();
@@ -97,6 +91,7 @@ public class ThinkForklift extends Application {
         theStage.setWidth(screenWidthResolution);
         theStage.setHeight(screenHeightResolution);
 
+//         handle keyboard input
         theScene.setOnKeyPressed(event -> currentlyActiveKeys.add(event.getCode().toString()));
     }
 
@@ -104,6 +99,7 @@ public class ThinkForklift extends Application {
         shelfList = new ArrayList<>();
         packageList = new ArrayList<>();
 
+        System.out.println(getClass().getResource("").getPath());
         floorImg = new Image(getClass().getResourceAsStream(IMG_PODLOGA), tileWidth, tileHeight, false, false);
         forkLift = new Forklift(gc, IMG_FORKLIFT, tileWidth, tileHeight, 0, 0);
 
@@ -131,10 +127,8 @@ public class ThinkForklift extends Application {
             do {
                 test = false;
                 Random r = new Random();
-                int low = 0;
-                int high = 15;
-                posX = r.nextInt(15);
-                posY = r.nextInt(15);
+                posX = r.nextInt(MAP_SIZE_X);
+                posY = r.nextInt(MAP_SIZE_Y);
 
                 for (Shelf shelf : shelfList) {
                     if ((shelf.getXPos() == posX) && (shelf.getYPos() == posY)) {
@@ -148,44 +142,6 @@ public class ThinkForklift extends Application {
         }
     }
 
-    private void drawFloor(GraphicsContext gc, Image image, float width, float height) {
-        for (int i = 0; i < MAP_SIZE_X; i++) {
-            for (int j = 0; j < MAP_SIZE_Y; j++) {
-                gc.drawImage(image, i * width, j * height);
-            }
-        }
-    }
-
-
-    private void handleInput(HashSet currentKeys, Forklift forklift) {
-        if (currentKeys.contains("LEFT")) {
-            if (!collisionFound(forklift.getXPos() - 1, forklift.getYPos())) {
-                forklift.moveLeft();
-            }
-        } else if (currentKeys.contains("RIGHT")) {
-            if (!collisionFound(forklift.getXPos() + 1, forklift.getYPos())) {
-                forklift.moveRight();
-            }
-        } else if (currentKeys.contains("UP")) {
-            if (!collisionFound(forklift.getXPos(), forklift.getYPos() - 1)) {
-                forklift.moveUp();
-            }
-        } else if (currentKeys.contains("DOWN")) {
-            if (!collisionFound(forklift.getXPos(), forklift.getYPos() + 1)) {
-                forklift.moveDown();
-            }
-        }
-    }
-
-    public boolean collisionFound(int nextXPos, int nextYPos) {
-        // collision with shelf
-        for (Shelf shelf : shelfList) {
-            if ((shelf.getXPos() == nextXPos) && (shelf.getYPos() == nextYPos)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private class MainGameLoop extends AnimationTimer {
 
@@ -193,9 +149,9 @@ public class ThinkForklift extends Application {
         public void handle(long now) {
             gc.clearRect(0, 0, screenWidthResolution, screenHeightResolution);
 
-            handleInput(currentlyActiveKeys, forkLift);
+            ForkliftController.handleInput(currentlyActiveKeys, forkLift, shelfList);
 
-            drawFloor(gc, floorImg, tileWidth, tileHeight);
+            ForkliftController.drawFloor(gc, floorImg, tileWidth, tileHeight);
 
             // skrócona forma
             shelfList.forEach(GameObject::render);
