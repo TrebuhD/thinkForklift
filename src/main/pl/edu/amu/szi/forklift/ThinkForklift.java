@@ -21,13 +21,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
+import static main.pl.edu.amu.szi.forklift.Constants.*;
+
 public class ThinkForklift extends Application {
     public static final int MAP_SIZE_X = 15;
     public static final int MAP_SIZE_Y = 15;
     public static final int PACKAGE_COUNT = 15;
     public static final int SHELF_COUNT = 20;
-    public static final int CANVAS_WIDTH = 600;
-    public static final int CANVAS_HEIGHT = 600;
+    public static final int CANVAS_WIDTH = 1000;
+    public static final int CANVAS_HEIGHT = 1000;
 
     private GraphicsContext gc;
     private HashSet<String> currentlyActiveKeys;
@@ -49,7 +51,7 @@ public class ThinkForklift extends Application {
 
     @Override
     public void start(Stage theStage) {
-        Scene theScene = prepareScene(theStage);
+        prepareScene(theStage);
         prepareObjects();
 
         new MainGameLoop().start();
@@ -57,14 +59,15 @@ public class ThinkForklift extends Application {
         theStage.show();
     }
 
-    private Scene prepareScene(Stage theStage) {
-        tileWidth = CANVAS_WIDTH / MAP_SIZE_X;
-        tileHeight = CANVAS_HEIGHT / MAP_SIZE_Y;
+    private void prepareScene(Stage theStage) {
 
         screenWidthResolution = Screen.getPrimary().getVisualBounds().getWidth();
         screenHeightResolution = Screen.getPrimary().getVisualBounds().getHeight();
 
-        theStage.setTitle("Think Forklift");
+        tileWidth = CANVAS_WIDTH / MAP_SIZE_X;
+        tileHeight = CANVAS_HEIGHT / MAP_SIZE_Y;
+
+        theStage.setTitle(APP_TITLE);
 
         Group root = new Group();
         root.setCache(true);
@@ -95,27 +98,25 @@ public class ThinkForklift extends Application {
         theStage.setHeight(screenHeightResolution);
 
         theScene.setOnKeyPressed(event -> currentlyActiveKeys.add(event.getCode().toString()));
-
-        return theScene;
     }
 
     private void prepareObjects() {
         shelfList = new ArrayList<>();
         packageList = new ArrayList<>();
 
-        floorImg = new Image(getClass().getResourceAsStream("/img/podloga2.png"), tileWidth, tileHeight, false, false);
-        forkLift = new Forklift(gc, "/img/forklift.png", tileWidth, tileHeight, 0, 0);
+        floorImg = new Image(getClass().getResourceAsStream(IMG_PODLOGA), tileWidth, tileHeight, false, false);
+        forkLift = new Forklift(gc, IMG_FORKLIFT, tileWidth, tileHeight, 0, 0);
 
         create_shelves();
-        create_packages("/img/paczka12.png");
-        create_packages("/img/paczka22.png");
-        create_packages("/img/paczka32.png");
+        create_packages(IMG_PACZKA12);
+        create_packages(IMG_PACZKA22);
+        create_packages(IMG_PACZKA32);
     }
 
     private void create_shelves() {
         for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
             for (int j = 5; j < MAP_SIZE_Y; j++) {
-                shelfList.add(new Shelf(gc, "/img/polkidwie.png", tileWidth, tileHeight, j, k));
+                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
             }
         }
     }
@@ -127,7 +128,6 @@ public class ThinkForklift extends Application {
 
             Boolean test;
 
-            // Tosia: co ten kod robi dokładnie?
             do {
                 test = false;
                 Random r = new Random();
