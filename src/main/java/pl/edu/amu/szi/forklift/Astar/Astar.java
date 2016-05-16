@@ -1,7 +1,6 @@
 package pl.edu.amu.szi.forklift.Astar;
 
 import pl.edu.amu.szi.forklift.Map;
-import pl.edu.amu.szi.forklift.objects.Forklift;
 import pl.edu.amu.szi.forklift.utils.Constants;
 
 import java.util.ArrayList;
@@ -10,11 +9,9 @@ import java.util.List;
 
 public class Astar {
 
-    private Forklift forklift;
     private Node[][] passablePath;
 
-    public Astar(Forklift forklift) {
-        this.forklift = forklift;
+    public Astar() {
         this.passablePath = preparePassablePath();
     }
 
@@ -114,13 +111,12 @@ public class Astar {
             currentNode = openList.get(0);
         }
 
-        System.out.println(closedList);
+//        System.out.println(closedList);
 
         Node lastNode = closedList.get(closedList.size() - 1);
         // traverse back to find path
         while (lastNode.getPreviousNode() != null) {
             finalResult.add(lastNode);
-            System.out.println("path: ");
             System.out.println(lastNode);
             lastNode = lastNode.getPreviousNode();
         }

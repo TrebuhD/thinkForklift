@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import pl.edu.amu.szi.forklift.objects.Forklift;
 
 import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static pl.edu.amu.szi.forklift.utils.Constants.*;
 
@@ -40,12 +42,20 @@ public class ThinkForklift extends Application {
         prepareScene(theStage);
 
         Forklift forklift = map.getForklift();
-        controller = new ForkliftController(forklift);
 
-
-        new MainGameLoop().start();
+        new RenderUiTimer().start();
 
         theStage.show();
+
+        // Controller thread
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                controller = new ForkliftController(forklift);
+                controller.handleInput(currentlyActiveKeys);
+                currentlyActiveKeys.clear();
+            }
+        }, 0, 50);
     }
 
     private void prepareScene(Stage theStage) {
@@ -89,19 +99,12 @@ public class ThinkForklift extends Application {
         theScene.setOnKeyPressed(event -> currentlyActiveKeys.add(event.getCode().toString()));
     }
 
-
-    private class MainGameLoop extends AnimationTimer {
+    private class RenderUiTimer extends AnimationTimer {
 
         @Override
         public void handle(long now) {
-
             gc.clearRect(0, 0, screenWidth, screenHeight);
-
-            controller.handleInput(currentlyActiveKeys);
-
             map.renderMap();
-
-            currentlyActiveKeys.clear();
         }
     }
 }

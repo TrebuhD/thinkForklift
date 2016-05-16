@@ -1,5 +1,6 @@
 package pl.edu.amu.szi.forklift;
 
+import javafx.application.Platform;
 import pl.edu.amu.szi.forklift.Astar.Astar;
 import pl.edu.amu.szi.forklift.Astar.DestinationUnreachableException;
 import pl.edu.amu.szi.forklift.Astar.Node;
@@ -7,6 +8,7 @@ import pl.edu.amu.szi.forklift.objects.Forklift;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
 public class ForkliftController {
 
@@ -54,7 +56,7 @@ public class ForkliftController {
     }
 
     public void moveForklift(int destinationX, int destinationY) throws DestinationUnreachableException {
-        Astar astar = new Astar(forklift);
+        Astar astar = new Astar();
         ArrayList<Node> list = (ArrayList<Node>) astar.findPath(forklift.getXPos(), forklift.getYPos(),
                 destinationX, destinationY);
         if (list == null) {
@@ -64,7 +66,8 @@ public class ForkliftController {
 
         for (int i = list.size() - 1; i >= 0; i--) {
             try {
-                Thread.sleep(1000);
+                TimeUnit.MILLISECONDS.sleep(500);
+                Platform.runLater(() -> Map.getInstance().renderMap());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
