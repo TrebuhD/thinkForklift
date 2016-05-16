@@ -1,36 +1,37 @@
 package pl.edu.amu.szi.forklift;
 
-import static pl.edu.amu.szi.forklift.ThinkForklift.forkLift;
-import static pl.edu.amu.szi.forklift.Map.shelfList;
+import pl.edu.amu.szi.forklift.objects.Forklift;
 
 import java.util.HashSet;
 
 public class ForkliftController {
 
-    public static void handleInput(HashSet currentKeys) {
+    public static void handleInput(HashSet currentKeys, Forklift forklift) {
+        Map map = Map.getInstance();
+
         if (currentKeys.contains("LEFT")) {
-            if (Map.isPassable(forkLift.getXPos() - 1, forkLift.getYPos())) {
-                forkLift.moveLeft();
+            if (map.isPassable(forklift.getXPos() - 1, forklift.getYPos())) {
+                forklift.moveLeft();
             }
         } else if (currentKeys.contains("RIGHT")) {
-            if (Map.isPassable(forkLift.getXPos() + 1, forkLift.getYPos())) {
-                forkLift.moveRight();
+            if (map.isPassable(forklift.getXPos() + 1, forklift.getYPos())) {
+                forklift.moveRight();
             }
         } else if (currentKeys.contains("UP")) {
-            if (Map.isPassable(forkLift.getXPos(), forkLift.getYPos() - 1)) {
-                forkLift.moveUp();
+            if (map.isPassable(forklift.getXPos(), forklift.getYPos() - 1)) {
+                forklift.moveUp();
             }
         } else if (currentKeys.contains("DOWN")) {
-            if (Map.isPassable(forkLift.getXPos(), forkLift.getYPos() + 1)) {
-                forkLift.moveDown();
+            if (map.isPassable(forklift.getXPos(), forklift.getYPos() + 1)) {
+                forklift.moveDown();
             }
 //      pick up package
         } else if (currentKeys.contains("SPACE")) {
-            if (Map.packageFound(forkLift.getXPos(), forkLift.getYPos())) {
-                if (forkLift.hasCargo()) {
-                    forkLift.dropCargo();
+            if (map.packageFound(forklift.getXPos(), forklift.getYPos())) {
+                if (forklift.hasCargo()) {
+                    forklift.dropCargo();
                 } else {
-                    forkLift.pickUpCargo(Map.getPackageAtPos(forkLift.getXPos(), forkLift.getYPos()));
+                    forklift.pickUpCargo(map.getPackageAtPos(forklift.getXPos(), forklift.getYPos()));
                 }
             }
         }

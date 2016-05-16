@@ -12,6 +12,8 @@ public class Astar {
     }
 
     private static Node[][] preparePassablePath() {
+        Map map = Map.getInstance();
+
         int sizeX = Constants.MAP_SIZE_X;
         int sizeY = Constants.MAP_SIZE_Y;
 
@@ -20,7 +22,7 @@ public class Astar {
         for (int i = 0; i < sizeX; i++) {
             for (int j = 0; j < sizeY; j++) {
 
-                path[i][j] = new Node(i, j, Map.isPassable(i, j));
+                path[i][j] = new Node(i, j, map.isPassable(i, j));
             }
         }
 
