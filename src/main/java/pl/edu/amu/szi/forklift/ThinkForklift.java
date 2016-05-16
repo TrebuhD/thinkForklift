@@ -27,7 +27,7 @@ public class ThinkForklift extends Application {
 
     private Map map;
 
-    private Forklift forklift;
+    private ForkliftController controller;
 
     public static void main(String[] args) {
         launch(args);
@@ -39,7 +39,9 @@ public class ThinkForklift extends Application {
 
         prepareScene(theStage);
 
-        forklift = map.getForklift();
+        Forklift forklift = map.getForklift();
+        controller = new ForkliftController(forklift);
+
 
         new MainGameLoop().start();
 
@@ -61,7 +63,6 @@ public class ThinkForklift extends Application {
 
         theStage.setScene(theScene);
 
-//         input key hashmap
         currentlyActiveKeys = new HashSet<>();
         StackPane holder = new StackPane();
         holder.setPrefSize(screenWidth, screenHeight);
@@ -95,8 +96,6 @@ public class ThinkForklift extends Application {
         public void handle(long now) {
 
             gc.clearRect(0, 0, screenWidth, screenHeight);
-
-            ForkliftController controller = new ForkliftController(map.getForklift());
 
             controller.handleInput(currentlyActiveKeys);
 

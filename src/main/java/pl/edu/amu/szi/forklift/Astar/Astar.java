@@ -112,8 +112,6 @@ public class Astar {
             openList.sort(nodeComparator);
 
             currentNode = openList.get(0);
-
-            System.out.println(closedList);
         }
 
         System.out.println(closedList);
