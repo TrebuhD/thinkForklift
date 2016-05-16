@@ -23,7 +23,7 @@ public class Map {
         return false;
     }
 
-    public static boolean collisionFound(int nextXPos, int nextYPos, ArrayList<Shelf> shelfList) {
+    public static boolean isPassable(int nextXPos, int nextYPos) {
         // collision with shelf
         for (Shelf shelf : shelfList) {
             if ((shelf.getXPos() == nextXPos) && (shelf.getYPos() == nextYPos)) {

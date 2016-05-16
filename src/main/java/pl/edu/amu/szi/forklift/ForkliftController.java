@@ -9,19 +9,19 @@ public class ForkliftController {
 
     public static void handleInput(HashSet currentKeys) {
         if (currentKeys.contains("LEFT")) {
-            if (!Map.collisionFound(forkLift.getXPos() - 1, forkLift.getYPos(), shelfList)) {
+            if (Map.isPassable(forkLift.getXPos() - 1, forkLift.getYPos())) {
                 forkLift.moveLeft();
             }
         } else if (currentKeys.contains("RIGHT")) {
-            if (!Map.collisionFound(forkLift.getXPos() + 1, forkLift.getYPos(), shelfList)) {
+            if (Map.isPassable(forkLift.getXPos() + 1, forkLift.getYPos())) {
                 forkLift.moveRight();
             }
         } else if (currentKeys.contains("UP")) {
-            if (!Map.collisionFound(forkLift.getXPos(), forkLift.getYPos() - 1, shelfList)) {
+            if (Map.isPassable(forkLift.getXPos(), forkLift.getYPos() - 1)) {
                 forkLift.moveUp();
             }
         } else if (currentKeys.contains("DOWN")) {
-            if (!Map.collisionFound(forkLift.getXPos(), forkLift.getYPos() + 1, shelfList)) {
+            if (Map.isPassable(forkLift.getXPos(), forkLift.getYPos() + 1)) {
                 forkLift.moveDown();
             }
 //      pick up package
