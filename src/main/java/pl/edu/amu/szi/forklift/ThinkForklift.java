@@ -96,7 +96,9 @@ public class ThinkForklift extends Application {
 
             gc.clearRect(0, 0, screenWidth, screenHeight);
 
-            ForkliftController.handleInput(currentlyActiveKeys, forklift);
+            ForkliftController controller = new ForkliftController(map.getForklift());
+
+            controller.handleInput(currentlyActiveKeys);
 
             map.renderMap();
 

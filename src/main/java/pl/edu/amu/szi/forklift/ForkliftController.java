@@ -6,7 +6,13 @@ import java.util.HashSet;
 
 public class ForkliftController {
 
-    public static void handleInput(HashSet currentKeys, Forklift forklift) {
+    private Forklift forklift;
+
+    public ForkliftController(Forklift forklift) {
+        this.forklift = forklift;
+    }
+
+    public void handleInput(HashSet currentKeys) {
         Map map = Map.getInstance();
 
         if (currentKeys.contains("LEFT")) {
