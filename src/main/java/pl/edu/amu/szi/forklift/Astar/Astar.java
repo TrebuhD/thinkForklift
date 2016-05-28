@@ -2,6 +2,8 @@ package pl.edu.amu.szi.forklift.Astar;
 
 import pl.edu.amu.szi.forklift.Map;
 import pl.edu.amu.szi.forklift.utils.Constants;
+import pl.edu.amu.szi.forklift.utils.Distance;
+import pl.edu.amu.szi.forklift.utils.Node;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -65,7 +67,7 @@ public class Astar {
 
             // compute H-value (distance from end node)
             for (Node n : adjecencies) {
-                n.setH(manhattanDistance(currentNode, n));
+                n.setH(Distance.distance(currentNode, n));
             }
 
             // find node with lowest H-value
@@ -77,7 +79,7 @@ public class Astar {
             }
         }
 
-        currentNode.setH(manhattanDistance(currentNode, destinationNode));
+        currentNode.setH(Distance.distance(currentNode, destinationNode));
 
         openList.add(currentNode);
 
@@ -125,23 +127,23 @@ public class Astar {
         return finalResult;
     }
 
-    private void applyHeuristic(ArrayList<Node> openList, List<Node> closedList, Node newNode, Node currentNode, Node destinationNode) {
-        if (newNode.isPassable() && !closedList.contains(newNode)) {
-            if (openList.contains(newNode)) {
-                if (newNode.getG() > currentNode.getG() + newNode.getCost()) {
+    private void applyHeuristic(ArrayList<Node> openList, List<Node> closedList, Node newNode, Node currentNode, Node destinationNode)
+    {
+        if (newNode.isPassable() && !closedList.contains(newNode))
+        {
+            if (openList.contains(newNode))
+            {
+                if (newNode.getG() > currentNode.getG() + newNode.getCost())
+                {
                     newNode.setG(currentNode.getG() + newNode.getCost()).setPreviousNode(currentNode);
                 }
-            } else {
+            }
+            else
+            {
                 openList.add(newNode.setPreviousNode(currentNode).setG(currentNode.getG()
-                        + newNode.getCost()).setH(manhattanDistance(newNode, destinationNode)));
+                        + newNode.getCost()).setH(Distance.distance(newNode, destinationNode)));
             }
         }
-    }
-
-    private static int manhattanDistance(Node begin, Node end) {
-        int distX = Math.abs(end.getPosX() - begin.getPosX());
-        int distY = Math.abs(end.getPosY() - begin.getPosY());
-        return distX + distY;
     }
 
     private static Node[][] preparePassablePath() {

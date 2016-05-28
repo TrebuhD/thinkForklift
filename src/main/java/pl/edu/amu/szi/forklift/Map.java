@@ -39,7 +39,7 @@ public class Map {
     }
 
     public void prepareObjects(GraphicsContext gc) {
-        this.gc = gc;
+        this.setGc(gc);
         floorImg = new Image(getClass().getResourceAsStream(IMG_PODLOGA), tileWidth, tileHeight, false, false);
         forklift = new Forklift(gc, IMG_FORKLIFT, map.getTileWidth(), map.getTileHeight(), 0, 0);
 
@@ -120,7 +120,7 @@ public class Map {
     }
 
     public void renderMap() {
-        drawFloor(gc, floorImg, tileWidth, tileHeight);
+        drawFloor(getGc(), floorImg, tileWidth, tileHeight);
         shelfList.forEach(GameObject::render);
         packageList.forEach(GameObject::render);
         forklift.render();
@@ -136,5 +136,13 @@ public class Map {
 
     public float getTileWidth() {
         return tileWidth;
+    }
+
+    public GraphicsContext getGc() {
+        return gc;
+    }
+
+    public void setGc(GraphicsContext gc) {
+        this.gc = gc;
     }
 }

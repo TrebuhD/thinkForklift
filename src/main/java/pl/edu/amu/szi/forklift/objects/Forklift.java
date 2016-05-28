@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 public class Forklift extends GameObject {
     private Package cargo;
 
+    private int noTasks;
+
     public Forklift(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
         super(gc, imageSrc, tileWidth, tileHeight, initX, initY);
         this.cargo = null;
@@ -57,4 +59,13 @@ public class Forklift extends GameObject {
             cargo.moveUp();
         }
     }
+
+    public int getNoTasks() {
+        return noTasks;
+    }
+
+    public void setNoTasks(int noTasks) {
+        this.noTasks = noTasks;
+    }
+
 }

@@ -16,4 +16,5 @@ public class Constants {
     public static final String IMG_PACZKA22 = "/img/paczka22.png";
     public static final String IMG_PACZKA32 = "/img/paczka32.png";
     public static final String IMG_POLKIDWIE = "/img/polkidwie.png";
+    public static final String PROPERTIES = "/config.properties";
 }
