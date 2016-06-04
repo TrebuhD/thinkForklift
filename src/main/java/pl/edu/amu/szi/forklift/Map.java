@@ -80,6 +80,7 @@ public class Map {
     public Package getPackageAtPos(int xPos, int yPos) {
         for (Package pkg : packageList) {
             if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
+                System.out.println("PKG at x:"+Integer.toString(xPos)+" y:"+ Integer.toString(yPos)+" has weight: "+Integer.toString(pkg.getWeight()));
                 return pkg;
             }
         }
@@ -115,7 +116,7 @@ public class Map {
                 }
             } while (test);
 
-            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY));
+            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY, 5));
         }
     }
 
