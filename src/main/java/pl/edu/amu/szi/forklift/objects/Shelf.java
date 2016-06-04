@@ -1,5 +1,6 @@
 package pl.edu.amu.szi.forklift.objects;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -20,6 +21,18 @@ public class Shelf extends GameObject {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public Package getTopPackageFromShelf(){
+        if(packageList.size()>0)
+        {
+            Package pkg = packageList.get(packageList.size()-1);
+            packageList.remove(pkg);
+            return pkg;
+        } else {
+            System.out.println("Error: There are no packages to take!");
+            return null;
         }
     }
 
@@ -61,6 +74,17 @@ public class Shelf extends GameObject {
         } else {
             System.out.println("PKG added to shelf.");
             return true;
+        }
+    }
+
+    public boolean notEmpty()
+    {
+        if(packageList.size()>0)
+        {
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }

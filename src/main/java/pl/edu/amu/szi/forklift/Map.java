@@ -103,6 +103,12 @@ public class Map {
         return null;
     }
 
+    public void spawnPackageAtPos(int xPos, int yPos, Package pkg){
+        pkg.setPosition(xPos, yPos);
+        packageList.add(pkg);
+        System.out.println("Pkg added to display");
+    }
+
     public Shelf getShelfAtPos(int xPos, int yPos){
         for (Shelf shelf : shelfList) {
             if ((shelf.getXPos() == xPos) && (shelf.getYPos() == yPos)) {

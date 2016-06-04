@@ -66,16 +66,10 @@ public class ForkliftController {
                     forklift.pickUpCargo(map.getPackageAtPos(forklift.getXPos(), forklift.getYPos()));
                 }
             }
-        } else if (currentKeys.contains("P")){
-            if (map.packageFound(forklift.getXPos(), forklift.getYPos())) {
-                if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)){ // check if shelf is above
-                    if (forklift.hasCargo() &&
-                        map.getShelfAtPos(forklift.getXPos(),forklift.getYPos()-1).addPkg(forklift.getCargo())) {
-                        forklift.dropCargo();
-                        map.removePackageAtPos(forklift.getXPos(),forklift.getYPos());
-                    }
-                }
-            }
+        } else if (currentKeys.contains("P")){ // put on shelf
+            putOnShelf(map);
+        } else if (currentKeys.contains("T")){ // take from shelf
+            takeFromShelf(map);
         } else if (currentKeys.contains("A")) {
             try {
                 moveForkliftAstar(xDestination, yDestination);
@@ -93,6 +87,54 @@ public class ForkliftController {
             {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void putOnShelf(Map map)
+    {
+        if (map.packageFound(forklift.getXPos(), forklift.getYPos())) {
+            if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)){ // check if shelf is above
+                if (forklift.hasCargo() &&
+                    map.getShelfAtPos(forklift.getXPos(),forklift.getYPos()-1).addPkg(forklift.getCargo()))
+                {
+                    forklift.dropCargo();
+                    map.removePackageAtPos(forklift.getXPos(),forklift.getYPos());
+                }
+                else
+                {
+                    System.out.println("Error: Cant put a pkg there!");
+                }
+            }
+            else
+            {
+                System.out.println("Error: There is no shelf above forklift!");
+            }
+        }
+        else
+        {
+            System.out.print("Error: Forklift does not have any pkg!");
+        }
+    }
+
+    public void takeFromShelf(Map map)
+    {
+        if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)) { // check if shelf is above
+            if (!forklift.hasCargo() &&
+                    map.getShelfAtPos(forklift.getXPos(), forklift.getYPos() - 1).notEmpty())
+            {
+                System.out.print("Taking pkg!");
+                map.spawnPackageAtPos(forklift.getXPos(), forklift.getYPos(),
+                        map.getShelfAtPos(forklift.getXPos(), forklift.getYPos() - 1).getTopPackageFromShelf());
+                forklift.pickUpCargo(map.getPackageAtPos(forklift.getXPos(), forklift.getYPos()));
+            }
+            else
+            {
+                System.out.println("Error: There are no pkg's on the shelf!");
+            }
+        }
+        else
+        {
+            System.out.println("Error: There is no shelf above me!");
         }
     }
 
