@@ -12,8 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import pl.edu.amu.szi.forklift.objects.Forklift;
+import pl.edu.amu.szi.forklift.utils.Distance;
 
-import java.util.HashSet;
+import java.util.*;
 
 import static pl.edu.amu.szi.forklift.utils.Constants.*;
 
@@ -21,29 +22,58 @@ public class ThinkForklift extends Application {
 
     private GraphicsContext gc;
     private HashSet<String> currentlyActiveKeys;
+    private HashMap<String, Double> currentMouseClick;
 
     private double screenWidth;
     private double screenHeight;
 
     private Map map;
 
-    private Forklift forklift;
+    private ForkliftController controller;
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage theStage) {
+    public void start(Stage theStage)
+	{
         map = Map.getInstance();
 
         prepareScene(theStage);
+		Properties p = new Properties();
+		//InputStream i = null;
+		int count = 0;
+        String metric = "";
+		try
+		{
 
-        forklift = map.getForklift();
+			p.load(getClass().getResourceAsStream(PROPERTIES));
+			count = Integer.parseInt(p.getProperty("zbierz.paczek"));
+            metric = p.getProperty("metryka");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+        Distance.setMetric(metric);
+        Forklift forklift = map.getForklift();
+		forklift.setNoTasks(count);
 
-        new MainGameLoop().start();
+        new RenderUiTimer().start();
 
         theStage.show();
+
+        // Controller thread
+		controller = new ForkliftController(forklift);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+				controller = new ForkliftController(forklift);
+                controller.handleInput(currentlyActiveKeys, currentMouseClick);
+                currentlyActiveKeys.clear();
+                currentMouseClick.clear();
+            }
+        }, 0, 50);
     }
 
     private void prepareScene(Stage theStage) {
@@ -61,8 +91,8 @@ public class ThinkForklift extends Application {
 
         theStage.setScene(theScene);
 
-//         input key hashmap
         currentlyActiveKeys = new HashSet<>();
+        currentMouseClick = new HashMap<>();
         StackPane holder = new StackPane();
         holder.setPrefSize(screenWidth, screenHeight);
 
@@ -86,21 +116,16 @@ public class ThinkForklift extends Application {
 
 //         handle keyboard input
         theScene.setOnKeyPressed(event -> currentlyActiveKeys.add(event.getCode().toString()));
+
+        theScene.setOnMouseClicked(event -> {currentMouseClick.put("X", event.getSceneX()); currentMouseClick.put("Y", event.getSceneY());});
     }
 
-
-    private class MainGameLoop extends AnimationTimer {
+    private class RenderUiTimer extends AnimationTimer {
 
         @Override
         public void handle(long now) {
-
             gc.clearRect(0, 0, screenWidth, screenHeight);
-
-            ForkliftController.handleInput(currentlyActiveKeys, forklift);
-
             map.renderMap();
-
-            currentlyActiveKeys.clear();
         }
     }
 }

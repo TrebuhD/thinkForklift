@@ -39,7 +39,7 @@ public class Map {
     }
 
     public void prepareObjects(GraphicsContext gc) {
-        this.gc = gc;
+        this.setGc(gc);
         floorImg = new Image(getClass().getResourceAsStream(IMG_PODLOGA), tileWidth, tileHeight, false, false);
         forklift = new Forklift(gc, IMG_FORKLIFT, map.getTileWidth(), map.getTileHeight(), 0, 0);
 
@@ -80,7 +80,39 @@ public class Map {
     public Package getPackageAtPos(int xPos, int yPos) {
         for (Package pkg : packageList) {
             if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
+                System.out.println(
+                        "PKG at x:"+Integer.toString(xPos)+
+                        " y:"+ Integer.toString(yPos)+
+                        " has weight: "+Integer.toString(pkg.getWeight())+
+                        " and is categorized as: "+pkg.getType()
+                );
                 return pkg;
+            }
+        }
+        return null;
+    }
+
+    public Package removePackageAtPos(int xPos, int yPos){
+        for (Package pkg : packageList) {
+            if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
+                System.out.println("Removing pkg from drawing!");
+                packageList.remove(pkg);
+                return pkg;
+            }
+        }
+        return null;
+    }
+
+    public void spawnPackageAtPos(int xPos, int yPos, Package pkg){
+        pkg.setPosition(xPos, yPos);
+        packageList.add(pkg);
+        System.out.println("Pkg added to display");
+    }
+
+    public Shelf getShelfAtPos(int xPos, int yPos){
+        for (Shelf shelf : shelfList) {
+            if ((shelf.getXPos() == xPos) && (shelf.getYPos() == yPos)) {
+                return shelf;
             }
         }
         return null;
@@ -89,12 +121,16 @@ public class Map {
     private void create_shelves(GraphicsContext gc) {
         for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
             for (int j = 5; j < MAP_SIZE_Y; j++) {
-                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
+                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k, 25));
             }
         }
     }
 
     private void create_packages(String packageType, GraphicsContext gc) {
+
+        Random ran = new Random();
+        int weight;
+        String type;
         for (int k = 0; k < PACKAGE_COUNT; k++) {
             int posX;
             int posY;
@@ -115,12 +151,20 @@ public class Map {
                 }
             } while (test);
 
-            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY));
+            weight = ran.nextInt(20) + 5;
+            if (weight >= 10)
+            {
+                type = "Heavy";
+            } else {
+                type = "Light";
+            }
+
+            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY, weight, type));
         }
     }
 
     public void renderMap() {
-        drawFloor(gc, floorImg, tileWidth, tileHeight);
+        drawFloor(getGc(), floorImg, tileWidth, tileHeight);
         shelfList.forEach(GameObject::render);
         packageList.forEach(GameObject::render);
         forklift.render();
@@ -136,5 +180,13 @@ public class Map {
 
     public float getTileWidth() {
         return tileWidth;
+    }
+
+    public GraphicsContext getGc() {
+        return gc;
+    }
+
+    public void setGc(GraphicsContext gc) {
+        this.gc = gc;
     }
 }

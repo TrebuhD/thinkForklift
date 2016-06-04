@@ -1,4 +1,4 @@
-package pl.edu.amu.szi.forklift.Astar;
+package pl.edu.amu.szi.forklift.utils;
 
 public class Node implements Comparable<Node>{
 
