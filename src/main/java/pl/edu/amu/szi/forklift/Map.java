@@ -92,10 +92,30 @@ public class Map {
         return null;
     }
 
+    public Package removePackageAtPos(int xPos, int yPos){
+        for (Package pkg : packageList) {
+            if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
+                System.out.println("Removing pkg from drawing!");
+                packageList.remove(pkg);
+                return pkg;
+            }
+        }
+        return null;
+    }
+
+    public Shelf getShelfAtPos(int xPos, int yPos){
+        for (Shelf shelf : shelfList) {
+            if ((shelf.getXPos() == xPos) && (shelf.getYPos() == yPos)) {
+                return shelf;
+            }
+        }
+        return null;
+    }
+
     private void create_shelves(GraphicsContext gc) {
         for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
             for (int j = 5; j < MAP_SIZE_Y; j++) {
-                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
+                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k, 25));
             }
         }
     }

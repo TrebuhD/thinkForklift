@@ -40,18 +40,22 @@ public class ForkliftController {
         if (currentKeys.contains("LEFT")) {
             if (map.isPassable(forklift.getXPos() - 1, forklift.getYPos())) {
                 forklift.moveLeft();
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("RIGHT")) {
             if (map.isPassable(forklift.getXPos() + 1, forklift.getYPos())) {
                 forklift.moveRight();
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("UP")) {
             if (map.isPassable(forklift.getXPos(), forklift.getYPos() - 1)) {
                 forklift.moveUp();
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("DOWN")) {
             if (map.isPassable(forklift.getXPos(), forklift.getYPos() + 1)) {
                 forklift.moveDown();
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
             }
 //      pick up package
         } else if (currentKeys.contains("SPACE")) {
@@ -60,6 +64,16 @@ public class ForkliftController {
                     forklift.dropCargo();
                 } else {
                     forklift.pickUpCargo(map.getPackageAtPos(forklift.getXPos(), forklift.getYPos()));
+                }
+            }
+        } else if (currentKeys.contains("P")){
+            if (map.packageFound(forklift.getXPos(), forklift.getYPos())) {
+                if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)){ // check if shelf is above
+                    if (forklift.hasCargo() &&
+                        map.getShelfAtPos(forklift.getXPos(),forklift.getYPos()-1).addPkg(forklift.getCargo())) {
+                        forklift.dropCargo();
+                        map.removePackageAtPos(forklift.getXPos(),forklift.getYPos());
+                    }
                 }
             }
         } else if (currentKeys.contains("A")) {
