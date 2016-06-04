@@ -80,7 +80,12 @@ public class Map {
     public Package getPackageAtPos(int xPos, int yPos) {
         for (Package pkg : packageList) {
             if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
-                System.out.println("PKG at x:"+Integer.toString(xPos)+" y:"+ Integer.toString(yPos)+" has weight: "+Integer.toString(pkg.getWeight()));
+                System.out.println(
+                        "PKG at x:"+Integer.toString(xPos)+
+                        " y:"+ Integer.toString(yPos)+
+                        " has weight: "+Integer.toString(pkg.getWeight())+
+                        " and is categorized as: "+pkg.getType()
+                );
                 return pkg;
             }
         }
@@ -96,6 +101,10 @@ public class Map {
     }
 
     private void create_packages(String packageType, GraphicsContext gc) {
+
+        Random ran = new Random();
+        int weight;
+        String type;
         for (int k = 0; k < PACKAGE_COUNT; k++) {
             int posX;
             int posY;
@@ -116,7 +125,15 @@ public class Map {
                 }
             } while (test);
 
-            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY, 5));
+            weight = ran.nextInt(20) + 5;
+            if (weight >= 10)
+            {
+                type = "Heavy";
+            } else {
+                type = "Light";
+            }
+
+            packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY, weight, type));
         }
     }
 
