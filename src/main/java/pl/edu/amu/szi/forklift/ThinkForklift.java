@@ -104,7 +104,7 @@ public class ThinkForklift extends Application {
         holder.setCache(true);
         holder.setCacheHint(CacheHint.SPEED);
 
-//         add Pane to main scene
+//         add Pane to start scene
         root.getChildren().add(holder);
 
         gc = canvas.getGraphicsContext2D();
