@@ -3,15 +3,15 @@ package pl.edu.amu.szi.forklift;
 import javafx.application.Platform;
 import pl.edu.amu.szi.forklift.Astar.Astar;
 import pl.edu.amu.szi.forklift.Astar.DestinationUnreachableException;
-import pl.edu.amu.szi.forklift.objects.Package;
-import pl.edu.amu.szi.forklift.objects.Shelf;
 import pl.edu.amu.szi.forklift.utils.Node;
 import pl.edu.amu.szi.forklift.IDAstar.IDAstar;
 import pl.edu.amu.szi.forklift.objects.Forklift;
+import pl.edu.amu.szi.forklift.objects.Package;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class ForkliftController {
@@ -26,13 +26,11 @@ public class ForkliftController {
 
     public void handleInput(HashSet currentKeys, HashMap currentMouseClick) {
         Map map = Map.getInstance();
-        int marginL = (int) Math.round(map.getGc().getCanvas().localToScene
-                (map.getGc().getCanvas().getBoundsInLocal()).getMinX());
-        int marginT = (int) Math.round(map.getGc().getCanvas().localToScene(
-                map.getGc().getCanvas().getBoundsInLocal()).getMinY());
+        int marginL = Integer.valueOf((int)Math.round(map.getGc().getCanvas().localToScene(map.getGc().getCanvas().getBoundsInLocal()).getMinX()));
+        int marginT = Integer.valueOf((int)Math.round(map.getGc().getCanvas().localToScene(map.getGc().getCanvas().getBoundsInLocal()).getMinY()));
 
-        Double tileWidth = (double) map.getTileWidth();
-        Double tileHeight = (double) map.getTileHeight();
+        Double tileWidth = Double.valueOf(map.getTileWidth());
+        Double tileHeight = Double.valueOf(map.getTileHeight());
         if(!currentMouseClick.isEmpty()) {
             Double xCoord = Double.parseDouble(currentMouseClick.get("X").toString());
             Double yCoord = Double.parseDouble(currentMouseClick.get("Y").toString());
@@ -42,22 +40,26 @@ public class ForkliftController {
         if (currentKeys.contains("LEFT")) {
             if (map.isPassable(forklift.getXPos() - 1, forklift.getYPos())) {
                 forklift.moveLeft();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("RIGHT")) {
             if (map.isPassable(forklift.getXPos() + 1, forklift.getYPos())) {
                 forklift.moveRight();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("UP")) {
             if (map.isPassable(forklift.getXPos(), forklift.getYPos() - 1)) {
                 forklift.moveUp();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("DOWN")) {
             if (map.isPassable(forklift.getXPos(), forklift.getYPos() + 1)) {
                 forklift.moveDown();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
 //      pick up package
         } else if (currentKeys.contains("SPACE")) {
@@ -69,9 +71,9 @@ public class ForkliftController {
                 }
             }
         } else if (currentKeys.contains("P")){ // put on shelf
-            putOnShelf();
+            putOnShelf(map);
         } else if (currentKeys.contains("T")){ // take from shelf
-            takeFromShelf();
+            takeFromShelf(map);
         } else if (currentKeys.contains("A")) {
             try {
                 moveForkliftAstar(xDestination, yDestination);
@@ -90,26 +92,21 @@ public class ForkliftController {
                 e.printStackTrace();
             }
         }
-        else if (currentKeys.contains("D")) {
-            deliverPackagesToShelves(map.getPackageList(), map.getShelfList());
-        }
     }
 
-    public void putOnShelf()
+    public void putOnShelf(Map map)
     {
-        Map map = Map.getInstance();
         if (map.packageFound(forklift.getXPos(), forklift.getYPos())) {
             if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)){ // check if shelf is above
                 if (forklift.hasCargo() &&
                     map.getShelfAtPos(forklift.getXPos(),forklift.getYPos()-1).addPkg(forklift.getCargo()))
                 {
                     forklift.dropCargo();
-                    System.out.println("PKG added to shelf.");
-                    map.hidePackageAtPos(forklift.getXPos(),forklift.getYPos());
+                    map.removePackageAtPos(forklift.getXPos(),forklift.getYPos());
                 }
                 else
                 {
-                    System.out.println("Error: Cant put a pkg there!");
+                    System.out.println("Error: Cant put a pkg there! Or there is a map edge above!");
                 }
             }
             else
@@ -119,13 +116,12 @@ public class ForkliftController {
         }
         else
         {
-            System.out.println("Error: Forklift does not have any pkg!\n");
+            System.out.print("Error: Forklift does not have any pkg!");
         }
     }
 
-    public void takeFromShelf()
+    public void takeFromShelf(Map map)
     {
-        Map map = Map.getInstance();
         if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)) { // check if shelf is above
             if (!forklift.hasCargo() &&
                     map.getShelfAtPos(forklift.getXPos(), forklift.getYPos() - 1).notEmpty())
@@ -144,36 +140,6 @@ public class ForkliftController {
         {
             System.out.println("Error: There is no shelf above me!");
         }
-    }
-
-    public void deliverPackagesToShelves(ArrayList<Package> packages, ArrayList<Shelf> shelves) {
-        int currShelfIndex = 0;
-        for (Package pkg : packages) {
-            try {
-                Shelf currShelf = shelves.get(currShelfIndex);
-                if (currShelf.checkShelf(pkg)) {
-                    deliverPackage(pkg, currShelf);
-                } else {
-                    currShelfIndex += 1;
-                    currShelf = shelves.get(currShelfIndex);
-                    deliverPackage(pkg, currShelf);
-                }
-            } catch (DestinationUnreachableException e) {
-                System.out.println("Destination Unreachable");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void deliverPackage(Package pkg, Shelf shelf) throws DestinationUnreachableException {
-        int pkgX = pkg.getXPos();
-        int pkgY = pkg.getYPos();
-        int shelfX = shelf.getXPos();
-        int shelfY = shelf.getYPos();
-        moveForkliftAstar(pkgX, pkgY);
-        forklift.pickUpCargo(Map.getInstance().getPackageAtPos(forklift.getXPos(), forklift.getYPos()));
-        moveForkliftAstar(shelfX, shelfY + 1);
-        putOnShelf();
     }
 
     public void moveForkliftIDAstar(int destinationX, int destinationY) throws DestinationUnreachableException {
@@ -208,7 +174,7 @@ public class ForkliftController {
         {
             try
             {
-                TimeUnit.MILLISECONDS.sleep(150);
+                TimeUnit.MILLISECONDS.sleep(500);
                 Platform.runLater(() -> Map.getInstance().renderMap());
             }
             catch (InterruptedException e)
@@ -217,11 +183,9 @@ public class ForkliftController {
             }
             int newPosX = list.get(i).getPosX();
             int newPosY = list.get(i).getPosY();
-//            System.out.println("Forklift moving: [" + forklift.getXPos() + "," + forklift.getYPos() + "] --> [" + newPosX + "," + newPosY + "]");
+            System.out.println("Forklift moving: [" + forklift.getXPos() + "," + forklift.getYPos() +
+                    "] --> [" + newPosX + "," + newPosY + "]");
             forklift.setPosition(newPosX, newPosY);
-            if (forklift.hasCargo()) {
-                forklift.getCargo().setPosition(newPosX, newPosY);
-            }
         }
         System.out.println("Wózek dotarł do celu.");
     }
