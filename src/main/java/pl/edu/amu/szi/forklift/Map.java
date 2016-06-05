@@ -38,6 +38,14 @@ public class Map {
         return map;
     }
 
+    public ArrayList<Shelf> getShelfList() {
+        return shelfList;
+    }
+
+    public ArrayList<Package> getPackageList() {
+        return packageList;
+    }
+
     public void prepareObjects(GraphicsContext gc) {
         this.setGc(gc);
         floorImg = new Image(getClass().getResourceAsStream(IMG_PODLOGA), tileWidth, tileHeight, false, false);
@@ -89,14 +97,15 @@ public class Map {
                 return pkg;
             }
         }
+        System.out.println("Package not found here");
         return null;
     }
 
-    public Package removePackageAtPos(int xPos, int yPos){
+    public Package hidePackageAtPos(int xPos, int yPos){
         for (Package pkg : packageList) {
             if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
                 System.out.println("Removing pkg from drawing!");
-                packageList.remove(pkg);
+                pkg.setHidden(true);
                 return pkg;
             }
         }
@@ -166,7 +175,11 @@ public class Map {
     public void renderMap() {
         drawFloor(getGc(), floorImg, tileWidth, tileHeight);
         shelfList.forEach(GameObject::render);
-        packageList.forEach(GameObject::render);
+        for (Package pkg : packageList) {
+            if (!pkg.isHidden()) {
+                pkg.render();
+            }
+        }
         forklift.render();
     }
 

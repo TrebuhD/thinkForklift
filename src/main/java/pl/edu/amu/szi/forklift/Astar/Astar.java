@@ -119,7 +119,7 @@ public class Astar {
         // traverse back to find path
         while (lastNode.getPreviousNode() != null) {
             finalResult.add(lastNode);
-            System.out.println(lastNode);
+//            System.out.println(lastNode);
             lastNode = lastNode.getPreviousNode();
         }
 

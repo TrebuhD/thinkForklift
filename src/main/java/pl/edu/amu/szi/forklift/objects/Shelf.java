@@ -1,13 +1,12 @@
 package pl.edu.amu.szi.forklift.objects;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Shelf extends GameObject {
-    private ArrayList<Package> packageList = new ArrayList<>();;
+    private ArrayList<Package> packageList = new ArrayList<>();
     private int shelfMaxWeight; // max weight of pkg on shelf
 
     public Shelf(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY, int shelfMaxWeight) {
@@ -39,14 +38,13 @@ public class Shelf extends GameObject {
     public int getWeightOnShelf()
     {
         int weight=0;
-        for(int i=0; i<packageList.size(); i++)
-        {
-            weight = weight + packageList.get(i).getWeight();
+        for (Package aPackageList : packageList) {
+            weight = weight + aPackageList.getWeight();
         }
         return weight;
     }
 
-    private boolean checkShelf(Package pkg){
+    public boolean checkShelf(Package pkg){
         int size = packageList.size();
 
         if(getWeightOnShelf()+pkg.getWeight()>shelfMaxWeight)
@@ -61,7 +59,7 @@ public class Shelf extends GameObject {
         } else if(size > 0)
         {
             if (Objects.equals(pkg.getType(),packageList.get(size-1).getType())
-                || Objects.equals(packageList.get(size-1).getType(), new String("Light")))
+                || Objects.equals(packageList.get(size-1).getType(), "Light"))
             {
                 System.out.println("PKG Added to shelf.");
                 return true;
@@ -72,19 +70,11 @@ public class Shelf extends GameObject {
                 return false;
             }
         } else {
-            System.out.println("PKG added to shelf.");
             return true;
         }
     }
 
-    public boolean notEmpty()
-    {
-        if(packageList.size()>0)
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean notEmpty() {
+        return packageList.size() > 0;
     }
 }

@@ -90,6 +90,9 @@ public class ForkliftController {
                 e.printStackTrace();
             }
         }
+        else if (currentKeys.contains("D")) {
+            deliverPackagesToShelves(map.getPackageList(), map.getShelfList());
+        }
     }
 
     public void putOnShelf()
@@ -101,7 +104,8 @@ public class ForkliftController {
                     map.getShelfAtPos(forklift.getXPos(),forklift.getYPos()-1).addPkg(forklift.getCargo()))
                 {
                     forklift.dropCargo();
-                    map.removePackageAtPos(forklift.getXPos(),forklift.getYPos());
+                    System.out.println("PKG added to shelf.");
+                    map.hidePackageAtPos(forklift.getXPos(),forklift.getYPos());
                 }
                 else
                 {
@@ -115,7 +119,7 @@ public class ForkliftController {
         }
         else
         {
-            System.out.print("Error: Forklift does not have any pkg!");
+            System.out.println("Error: Forklift does not have any pkg!\n");
         }
     }
 
@@ -143,7 +147,22 @@ public class ForkliftController {
     }
 
     public void deliverPackagesToShelves(ArrayList<Package> packages, ArrayList<Shelf> shelves) {
-
+        int currShelfIndex = 0;
+        for (Package pkg : packages) {
+            try {
+                Shelf currShelf = shelves.get(currShelfIndex);
+                if (currShelf.checkShelf(pkg)) {
+                    deliverPackage(pkg, currShelf);
+                } else {
+                    currShelfIndex += 1;
+                    currShelf = shelves.get(currShelfIndex);
+                    deliverPackage(pkg, currShelf);
+                }
+            } catch (DestinationUnreachableException e) {
+                System.out.println("Destination Unreachable");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void deliverPackage(Package pkg, Shelf shelf) throws DestinationUnreachableException {
@@ -151,9 +170,9 @@ public class ForkliftController {
         int pkgY = pkg.getYPos();
         int shelfX = shelf.getXPos();
         int shelfY = shelf.getYPos();
-        moveForkliftIDAstar(pkgX, pkgY);
-        forklift.pickUpCargo(Map.getInstance().getPackageAtPos(pkgX, pkgY));
-        moveForkliftIDAstar(shelfX, shelfY-1);
+        moveForkliftAstar(pkgX, pkgY);
+        forklift.pickUpCargo(Map.getInstance().getPackageAtPos(forklift.getXPos(), forklift.getYPos()));
+        moveForkliftAstar(shelfX, shelfY + 1);
         putOnShelf();
     }
 
@@ -189,7 +208,7 @@ public class ForkliftController {
         {
             try
             {
-                TimeUnit.MILLISECONDS.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(150);
                 Platform.runLater(() -> Map.getInstance().renderMap());
             }
             catch (InterruptedException e)
@@ -198,8 +217,11 @@ public class ForkliftController {
             }
             int newPosX = list.get(i).getPosX();
             int newPosY = list.get(i).getPosY();
-            System.out.println("Forklift moving: [" + forklift.getXPos() + "," + forklift.getYPos() + "] --> [" + newPosX + "," + newPosY + "]");
+//            System.out.println("Forklift moving: [" + forklift.getXPos() + "," + forklift.getYPos() + "] --> [" + newPosX + "," + newPosY + "]");
             forklift.setPosition(newPosX, newPosY);
+            if (forklift.hasCargo()) {
+                forklift.getCargo().setPosition(newPosX, newPosY);
+            }
         }
         System.out.println("Wózek dotarł do celu.");
     }
