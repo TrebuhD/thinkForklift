@@ -1,0 +1,11 @@
+
+highest accuracy = 0.85, best threshhold = 0.34895119606872077
+
+Value <= 25.0
+|----Value <= 14.0 [C2] out of {C2x3}
+|----Value > 14.0
+|----|----Weight <= 5.0 [C2] out of {C2x1}
+|----|----Weight > 5.0
+|----|----|----Type = light [C4] out of {C4x2}
+|----|----|----Type = heavy [C2] out of {C2x1}
+Value > 25.0 [C1] out of {C3x1 C1x9}
