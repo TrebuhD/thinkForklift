@@ -90,9 +90,9 @@ public class Map {
             if (pkg.getXPos() == xPos && pkg.getYPos() == yPos) {
                 System.out.println(
                         "PKG at x:"+Integer.toString(xPos)+
-                        " y:"+ Integer.toString(yPos)+
-                        " has weight: "+Integer.toString(pkg.getWeight())+
-                        " and is categorized as: "+pkg.getType()
+                                " y:"+ Integer.toString(yPos)+
+                                " has weight: "+Integer.toString(pkg.getWeight())+
+                                " and is categorized as: "+pkg.getType()
                 );
                 return pkg;
             }
@@ -130,7 +130,7 @@ public class Map {
     private void create_shelves(GraphicsContext gc) {
         for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
             for (int j = 5; j < MAP_SIZE_Y; j++) {
-                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
+                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k, 25));
             }
         }
     }
