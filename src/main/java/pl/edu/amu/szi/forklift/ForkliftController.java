@@ -156,21 +156,52 @@ public class ForkliftController {
 
     public void deliverPackagesToShelves(ArrayList<Package> packages, ArrayList<Shelf> shelves) {
         int currShelfIndex = 0;
+        int iterator = 0;
+        int currentRow = 0;
+        Map map = Map.getInstance();
+        ArrayList<String> classified = map.getClassification();
+        ArrayList<Integer> currentShelfRow = new ArrayList<>();
+        currentShelfRow.add(0,0);
+        currentShelfRow.add(1,11);
+        currentShelfRow.add(2,21);
+        currentShelfRow.add(3,31);
+        currentShelfRow.add(4,41);
+        currentShelfRow.add(5,51);
+
         getPkgClassification(packages);
+
         for (Package pkg : packages) {
             try {
-                Shelf currShelf = shelves.get(currShelfIndex);
+                switch(classified.get(iterator)){
+                    case "C1":
+                        currentRow = 0;
+                        break;
+                    case "C2":
+                        currentRow = 1;
+                        break;
+                    case "C3":
+                        currentRow = 2;
+                        break;
+                    case "C4":
+                        currentRow = 3;
+                        break;
+                }
+                System.out.println("Pkg category is:" + classified.get(iterator) +" shelf row:" + currentRow);
+                Shelf currShelf = shelves.get(currentShelfRow.get(currentRow));
                 if (currShelf.checkShelf(pkg)) {
                     deliverPackage(pkg, currShelf);
                 } else {
-                    currShelfIndex += 1;
-                    currShelf = shelves.get(currShelfIndex);
+                    //currShelfIndex += 1;
+                    currentShelfRow.set(currentRow,currentShelfRow.get(currentRow)+1);
+                    //currShelf = shelves.get(currShelfIndex);
+                    currShelf = shelves.get(currentShelfRow.get(currentRow));
                     deliverPackage(pkg, currShelf);
                 }
             } catch (DestinationUnreachableException e) {
                 System.out.println("Destination Unreachable");
                 e.printStackTrace();
             }
+        iterator ++;
         }
     }
 

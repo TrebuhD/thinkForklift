@@ -31,7 +31,7 @@ public class Map {
         classification.add(elem);
     }
 
-    public ArrayList<String> getClassification() {return classification }
+    public ArrayList<String> getClassification() {return classification; }
 
     private Map() {
         shelfList = new ArrayList<>();
