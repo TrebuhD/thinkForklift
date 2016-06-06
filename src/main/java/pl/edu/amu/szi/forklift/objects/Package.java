@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Package extends GameObject {
     private Integer weight;
+    private Integer value;
     private String type;
     private boolean isHidden;
 

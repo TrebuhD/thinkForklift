@@ -1,5 +1,6 @@
 package pl.edu.amu.szi.forklift;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.application.Platform;
 import pl.edu.amu.szi.forklift.Astar.Astar;
 import pl.edu.amu.szi.forklift.Astar.DestinationUnreachableException;
@@ -167,6 +168,15 @@ public class ForkliftController {
                 System.out.println("Destination Unreachable");
                 e.printStackTrace();
             }
+        }
+    }
+
+    private ArrayList<Package> getPkgClassification(ArrayList<Package> packages)
+    {
+        String[] input = new String[];
+        for (Package pkg : packages)
+        {
+
         }
     }
 
