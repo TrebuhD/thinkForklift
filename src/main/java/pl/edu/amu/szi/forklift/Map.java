@@ -18,6 +18,7 @@ public class Map {
 
     public static ArrayList<Shelf> shelfList;
     public static ArrayList<Package> packageList;
+    private ArrayList<String> classification = new ArrayList<>();
 
     private float tileWidth;
     private float tileHeight;
@@ -25,6 +26,12 @@ public class Map {
     private Image floorImg;
     private Forklift forklift;
     private GraphicsContext gc;
+
+    public void addClassification(String elem){
+        classification.add(elem);
+    }
+
+    public ArrayList<String> getClassification() {return classification }
 
     private Map() {
         shelfList = new ArrayList<>();
@@ -163,9 +170,9 @@ public class Map {
             weight = ran.nextInt(20) + 5;
             if (weight >= 10)
             {
-                type = "Heavy";
+                type = "heavy";
             } else {
-                type = "Light";
+                type = "light";
             }
 
             packageList.add(new Package(gc, packageType, tileWidth, tileHeight, posX, posY, weight, type));

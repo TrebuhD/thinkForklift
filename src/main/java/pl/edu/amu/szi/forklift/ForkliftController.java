@@ -4,6 +4,7 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.application.Platform;
 import pl.edu.amu.szi.forklift.Astar.Astar;
 import pl.edu.amu.szi.forklift.Astar.DestinationUnreachableException;
+import pl.edu.amu.szi.forklift.c45.start;
 import pl.edu.amu.szi.forklift.objects.Package;
 import pl.edu.amu.szi.forklift.objects.Shelf;
 import pl.edu.amu.szi.forklift.utils.Node;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class ForkliftController {
 
     private Forklift forklift;
+
 
 
     private static int xDestination, yDestination;
@@ -154,6 +156,7 @@ public class ForkliftController {
 
     public void deliverPackagesToShelves(ArrayList<Package> packages, ArrayList<Shelf> shelves) {
         int currShelfIndex = 0;
+        getPkgClassification(packages);
         for (Package pkg : packages) {
             try {
                 Shelf currShelf = shelves.get(currShelfIndex);
@@ -171,13 +174,21 @@ public class ForkliftController {
         }
     }
 
-    private ArrayList<Package> getPkgClassification(ArrayList<Package> packages)
+    private void getPkgClassification(ArrayList<Package> packages)
     {
-        String[] input = new String[];
+        String input = new String();
+        String line = new String();
         for (Package pkg : packages)
         {
-
+            line = pkg.getType() + "," + pkg.getWeight() + "," + pkg.getValue() + ",C1";
+            if(input.length()>1)
+            {
+                input = input + ":" + line;
+            } else {
+             input = line;
+            }
         }
+        start.generate(input);
     }
 
     public void deliverPackage(Package pkg, Shelf shelf) throws DestinationUnreachableException {

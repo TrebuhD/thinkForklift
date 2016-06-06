@@ -16,7 +16,7 @@ public class Package extends GameObject {
         this.type = type;
         this.isHidden = false;
         Random ran = new Random();
-        if(((String)"Heavy").equals(type)){
+        if(((String)"heavy").equals(type)){
             if(weight > 15)
             {
                 this.value = weight * 1 + ran.nextInt(30);

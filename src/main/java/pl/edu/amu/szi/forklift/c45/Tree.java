@@ -1,5 +1,7 @@
 package pl.edu.amu.szi.forklift.c45;
 
+import pl.edu.amu.szi.forklift.Map;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -11,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Tree {
+	Map map = Map.getInstance();
 	private List<Attribute> attributes; // all attribute list
 	private List<Integer> trainingData = new ArrayList<Integer>(); //index of all training samples
 	private List<Integer> testData = new ArrayList<Integer>(); // index of all test samples
@@ -496,16 +499,20 @@ public class Tree {
 		return res.toString();
 	}
 
-	public void generateFunClassification(String[] input){
+	public void generateFunClassification(String input){
 		// TODO INTEGRATE FUNCTION & TEST IT!!!!
-		for(String line :input)
+		System.out.println("Starting!");
+		String[] parsed = input.split(":");
+		for(int i=0; i<parsed.length; i++)
 		{
-			String[] values = line.split(",");
+			String[] values = parsed[i].split(",");
 			Record rec = new Record();
 			rec.setAttribute(values);
+			System.out.print("Before: ");
+			System.out.println(rec);
 			System.out.print("Classification of element is: ");
 			System.out.println(this.predict(rec));
-			// call a class method to add prediction
+			map.addClassification(this.predict(rec)); // call a class method to add prediction
 		}
 	}
 
