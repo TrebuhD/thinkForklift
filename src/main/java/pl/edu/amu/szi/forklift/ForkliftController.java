@@ -26,11 +26,11 @@ public class ForkliftController {
 
     public void handleInput(HashSet currentKeys, HashMap currentMouseClick) {
         Map map = Map.getInstance();
-        int marginL = Integer.valueOf((int)Math.round(map.getGc().getCanvas().localToScene(map.getGc().getCanvas().getBoundsInLocal()).getMinX()));
-        int marginT = Integer.valueOf((int)Math.round(map.getGc().getCanvas().localToScene(map.getGc().getCanvas().getBoundsInLocal()).getMinY()));
+        int marginL = (int) Math.round(map.getGc().getCanvas().localToScene(map.getGc().getCanvas().getBoundsInLocal()).getMinX());
+        int marginT = (int) Math.round(map.getGc().getCanvas().localToScene(map.getGc().getCanvas().getBoundsInLocal()).getMinY());
 
-        Double tileWidth = Double.valueOf(map.getTileWidth());
-        Double tileHeight = Double.valueOf(map.getTileHeight());
+        Double tileWidth = (double) map.getTileWidth();
+        Double tileHeight = (double) map.getTileHeight();
         if(!currentMouseClick.isEmpty()) {
             Double xCoord = Double.parseDouble(currentMouseClick.get("X").toString());
             Double yCoord = Double.parseDouble(currentMouseClick.get("Y").toString());
@@ -71,9 +71,9 @@ public class ForkliftController {
                 }
             }
         } else if (currentKeys.contains("P")){ // put on shelf
-            putOnShelf(map);
+            putOnShelf();
         } else if (currentKeys.contains("T")){ // take from shelf
-            takeFromShelf(map);
+            takeFromShelf();
         } else if (currentKeys.contains("A")) {
             try {
                 moveForkliftAstar(xDestination, yDestination);
@@ -94,15 +94,16 @@ public class ForkliftController {
         }
     }
 
-    public void putOnShelf(Map map)
+    public void putOnShelf()
     {
+        Map map = Map.getInstance();
         if (map.packageFound(forklift.getXPos(), forklift.getYPos())) {
             if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)){ // check if shelf is above
                 if (forklift.hasCargo() &&
                     map.getShelfAtPos(forklift.getXPos(),forklift.getYPos()-1).addPkg(forklift.getCargo()))
                 {
                     forklift.dropCargo();
-                    map.removePackageAtPos(forklift.getXPos(),forklift.getYPos());
+                    map.hidePackageAtPos(forklift.getXPos(),forklift.getYPos());
                 }
                 else
                 {
@@ -120,8 +121,9 @@ public class ForkliftController {
         }
     }
 
-    public void takeFromShelf(Map map)
+    public void takeFromShelf()
     {
+        Map map = Map.getInstance();
         if(!map.isPassable(forklift.getXPos(),forklift.getYPos()-1)) { // check if shelf is above
             if (!forklift.hasCargo() &&
                     map.getShelfAtPos(forklift.getXPos(), forklift.getYPos() - 1).notEmpty())
@@ -174,7 +176,7 @@ public class ForkliftController {
         {
             try
             {
-                TimeUnit.MILLISECONDS.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(150);
                 Platform.runLater(() -> Map.getInstance().renderMap());
             }
             catch (InterruptedException e)
