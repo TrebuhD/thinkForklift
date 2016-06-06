@@ -1,0 +1,11 @@
+@relation pkg
+
+@attribute Type{heavy,light}
+@attribute Weight real
+@attribute Value real
+@attribute label {C1,C2,C3,C4}
+
+@data
+heavy,50,200,C1
+light,5,200,C1
+light,8,20,C1

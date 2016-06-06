@@ -1,0 +1,59 @@
+
+highest accuracy = 0.828654970760234, best threshhold = 0.0
+
+Vacation <= 24.0
+|----property <= 3.2804
+|----|----eCredit <= 17.0
+|----|----|----Type = professor [C2] out of {C2x11}
+|----|----|----Type = student [C1] out of {C1x2}
+|----|----|----Type = librarian [C2] out of {C2x12}
+|----|----eCredit > 17.0
+|----|----|----LifeStyle = spend>>saving [C1] out of {C1x1}
+|----|----|----LifeStyle = spend<<saving [C4] out of {C4x2}
+|----|----|----LifeStyle = spend>saving [C1] out of {C1x7}
+|----|----|----LifeStyle = spend<saving [C1] out of {C1x2}
+|----property > 3.2804
+|----|----salary <= 19.83
+|----|----|----Vacation <= 9.0
+|----|----|----|----LifeStyle = spend>saving [C1] out of {C1x2}
+|----|----|----|----LifeStyle = spend<saving [C3] out of {C3x1}
+|----|----|----Vacation > 9.0 [C1] out of {C1x3}
+|----|----salary > 19.83 [C3] out of {C3x36}
+Vacation > 24.0
+|----eCredit <= 26.0
+|----|----Vacation <= 46.0
+|----|----|----Type = professor [C4] out of {C4x1}
+|----|----|----Type = student [C1] out of {C1x2}
+|----|----|----Type = librarian [C4] out of {C4x2}
+|----|----|----Type = engineer [C1] out of {C1x1}
+|----|----Vacation > 46.0
+|----|----|----LifeStyle = spend>>saving [C5] out of {C5x16}
+|----|----|----LifeStyle = spend<<saving [C4] out of {C4x1}
+|----|----|----LifeStyle = spend>saving [C5] out of {C5x17}
+|----eCredit > 26.0
+|----|----property <= 3.0437
+|----|----|----property <= 2.5493 [C4] out of {C4x9}
+|----|----|----property > 2.5493
+|----|----|----|----property <= 2.7064
+|----|----|----|----|----LifeStyle = spend>>saving
+|----|----|----|----|----|----Type = professor [C4] out of {C4x1}
+|----|----|----|----|----|----Type = engineer [C1] out of {C1x1}
+|----|----|----|----|----LifeStyle = spend<<saving [C1] out of {C1x2}
+|----|----|----|----|----LifeStyle = spend>saving [C4] out of {C4x2}
+|----|----|----|----property > 2.7064 [C4] out of {C4x6}
+|----|----property > 3.0437
+|----|----|----eCredit <= 62.0
+|----|----|----|----salary <= 20.07
+|----|----|----|----|----eCredit <= 40.0 [C1] out of {C1x2}
+|----|----|----|----|----eCredit > 40.0 [C4] out of {C4x6}
+|----|----|----|----salary > 20.07
+|----|----|----|----|----property <= 4.9717
+|----|----|----|----|----|----property <= 3.2021 [C1] out of {C1x2}
+|----|----|----|----|----|----property > 3.2021 [C4] out of {C4x2}
+|----|----|----|----|----property > 4.9717 [C1] out of {C1x3}
+|----|----|----eCredit > 62.0
+|----|----|----|----eCredit <= 84.0 [C4] out of {C4x9}
+|----|----|----|----eCredit > 84.0
+|----|----|----|----|----Type = doctor [C4] out of {C4x1}
+|----|----|----|----|----Type = student [C1] out of {C1x1}
+|----|----|----|----|----Type = engineer [C1] out of {C1x2}

@@ -8,11 +8,11 @@ import java.util.Objects;
 
 public class Shelf extends GameObject {
     private ArrayList<Package> packageList = new ArrayList<>();;
-    private int shelfMaxWeight; // max weight of pkg on shelf
+    public static final int SHELF_MAX_WEIGHT = 25; // max weight of pkg on shelf
+    public static final int MAX_PACKAGES = 3;
 
-    public Shelf(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY, int shelfMaxWeight) {
+    public Shelf(GraphicsContext gc, String imageSrc, float tileWidth, float tileHeight, int initX, int initY) {
         super(gc, imageSrc, tileWidth, tileHeight, initX, initY);
-        this.shelfMaxWeight = shelfMaxWeight;
     }
 
     public boolean addPkg(Package pkg){ // returns 1 if added, otherwise 0
@@ -25,7 +25,7 @@ public class Shelf extends GameObject {
     }
 
     public Package getTopPackageFromShelf(){
-        if(packageList.size()>0)
+        if(notEmpty())
         {
             Package pkg = packageList.get(packageList.size()-1);
             packageList.remove(pkg);
@@ -49,12 +49,12 @@ public class Shelf extends GameObject {
     private boolean checkShelf(Package pkg){
         int size = packageList.size();
 
-        if(getWeightOnShelf()+pkg.getWeight()>shelfMaxWeight)
+        if(getWeightOnShelf()+pkg.getWeight()>SHELF_MAX_WEIGHT)
         {
             System.out.println("PKG's on shelf are too heavy!");
             return false;
         }
-        if(size==3)
+        if(size==MAX_PACKAGES)
         {
             System.out.println("Error: Shelf already have 3 packages!");
             return false;
@@ -79,12 +79,6 @@ public class Shelf extends GameObject {
 
     public boolean notEmpty()
     {
-        if(packageList.size()>0)
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (packageList.size() > 0);
     }
 }

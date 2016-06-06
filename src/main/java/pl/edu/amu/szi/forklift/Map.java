@@ -121,7 +121,7 @@ public class Map {
     private void create_shelves(GraphicsContext gc) {
         for (int k = 0; k < MAP_SIZE_X; k = k + 3) {
             for (int j = 5; j < MAP_SIZE_Y; j++) {
-                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k, 25));
+                shelfList.add(new Shelf(gc, IMG_POLKIDWIE, tileWidth, tileHeight, j, k));
             }
         }
     }
