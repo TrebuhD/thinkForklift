@@ -12,6 +12,7 @@ import pl.edu.amu.szi.forklift.objects.Forklift;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class ForkliftController {
@@ -42,22 +43,26 @@ public class ForkliftController {
         if (currentKeys.contains("LEFT")) {
             if (map.isPassable(forklift.getXPos() - 1, forklift.getYPos())) {
                 forklift.moveLeft();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("RIGHT")) {
             if (map.isPassable(forklift.getXPos() + 1, forklift.getYPos())) {
                 forklift.moveRight();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("UP")) {
             if (map.isPassable(forklift.getXPos(), forklift.getYPos() - 1)) {
                 forklift.moveUp();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
         } else if (currentKeys.contains("DOWN")) {
             if (map.isPassable(forklift.getXPos(), forklift.getYPos() + 1)) {
                 forklift.moveDown();
-                System.out.println("X:"+Integer.toString(forklift.getXPos())+ " Y:"+Integer.toString(forklift.getYPos()));
+                System.out.println("X:"+Integer.toString(forklift.getXPos())+
+                        " Y:"+Integer.toString(forklift.getYPos()));
             }
 //      pick up package
         } else if (currentKeys.contains("SPACE")) {
@@ -109,7 +114,7 @@ public class ForkliftController {
                 }
                 else
                 {
-                    System.out.println("Error: Cant put a pkg there!");
+                    System.out.println("Error: Cant put a pkg there! Or there is a map edge above!");
                 }
             }
             else
