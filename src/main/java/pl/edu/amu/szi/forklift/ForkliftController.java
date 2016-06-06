@@ -193,7 +193,7 @@ public class ForkliftController {
                 } else {
                     //currShelfIndex += 1;
                     currentShelfRow.set(currentRow,currentShelfRow.get(currentRow)+1);
-                    //currShelf = shelves.get(currShelfIndex);
+                    //currShelf = shelves.get(currShelfIndex)
                     currShelf = shelves.get(currentShelfRow.get(currentRow));
                     deliverPackage(pkg, currShelf);
                 }
