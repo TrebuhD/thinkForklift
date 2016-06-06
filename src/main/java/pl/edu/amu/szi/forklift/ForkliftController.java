@@ -12,7 +12,6 @@ import pl.edu.amu.szi.forklift.objects.Forklift;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class ForkliftController {
@@ -152,17 +151,14 @@ public class ForkliftController {
     }
 
     public void deliverPackagesToShelves(ArrayList<Package> packages, ArrayList<Shelf> shelves) {
-        int currShelfIndex = 0;
         for (Package pkg : packages) {
+            int currShelfIndex = 0;
             try {
-                Shelf currShelf = shelves.get(currShelfIndex);
-                if (currShelf.checkShelf(pkg)) {
-                    deliverPackage(pkg, currShelf);
-                } else {
-                    currShelfIndex += 1;
-                    currShelf = shelves.get(currShelfIndex);
-                    deliverPackage(pkg, currShelf);
+                while (shelves.get(currShelfIndex).checkShelf(pkg) == false) {
+                    System.out.println("Checking shelf #" + currShelfIndex);
+                    currShelfIndex ++;
                 }
+                deliverPackage(pkg, shelves.get(currShelfIndex));
             } catch (DestinationUnreachableException e) {
                 System.out.println("Destination Unreachable");
                 e.printStackTrace();
